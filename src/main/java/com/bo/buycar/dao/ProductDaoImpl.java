@@ -30,8 +30,10 @@ public class ProductDaoImpl implements ProductDao{
 
 	@Override
 	public Product updateProduct(Product product) {
-		// TODO Auto-generated method stub
-		return null;
+		Session session = sessionFactory.getCurrentSession();
+		session.saveOrUpdate(product);
+		session.flush();
+		return product;
 	}
 
 	@Override

@@ -1,9 +1,11 @@
 package com.bo.buycar.model.product;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Convert;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -11,11 +13,22 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Transient;
+import javax.validation.constraints.DecimalMin;
+import javax.validation.constraints.Digits;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 
+import org.hibernate.validator.constraints.Length;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.sun.istack.internal.NotNull;
+
 @Entity
-public class Product {
+public class Product implements Serializable{
 
 	public Product() {
 		productImages = new ArrayList<>();
@@ -24,11 +37,17 @@ public class Product {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	int productId;
 
+	@NotEmpty(message="You must enter a product name.")
 	String productName;
 
+	@NotEmpty(message="You must enter a product description.")
 	String productDescription;
 
+	@NotNull
 	double productPrice;
+	
+	@NotNull
+    @Min(1900)
 	int productYear;
 	
 	@Transient
