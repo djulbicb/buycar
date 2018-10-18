@@ -74,7 +74,14 @@ public class SellerController {
 		}
 		
 		productDao.addProduct(product);
-		return "seller/addProduct";
+		return "redirect:/seller/view/showAll";
+	}
+	
+	@GetMapping("/view/showAll")
+	public String showAllProducts(Model model) {
+		List<Product> products = productDao.getProductAll();
+		model.addAttribute("products", products);
+		return "seller/allProducts";
 	}
 	
 	@GetMapping("/view/{productId}")
@@ -84,12 +91,24 @@ public class SellerController {
 		return "seller/viewProduct";
 	}
 	
-	@GetMapping("/deleteProduct/{productId}")
-	public String deleteProduct(@PathVariable("productId") int productId, Model model) {
-		Product product = new Product();
+	@GetMapping("/updateProduct/{productId}")
+	public String showUpdateProduct(@PathVariable("productId") int productId, Model model) {
+		Product product = productDao.getProductById(productId);
 		model.addAttribute("product", product);
+		return "seller/updateProduct";
+	}
+	
+	@GetMapping("/deleteProduct/{productId}")
+	public String showDeleteProduct(@PathVariable("productId") int productId, Model model) {
+		Product product = productDao.getProductById(productId);
+		model.addAttribute("product", product);
+		return "seller/deleteProductCheck"; 
+	}
+	
+	@PostMapping("/deleteProduct/{productId}")
+	public String deleteProduct(@PathVariable("productId") int productId, Model model) {
 		productDao.deleteProduct(productId);
-		return "seller/addProduct"; 
+		return "redirect:/seller/view/showAll"; 
 	}
 	
 }

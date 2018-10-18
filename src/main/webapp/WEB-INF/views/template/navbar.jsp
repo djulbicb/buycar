@@ -1,6 +1,9 @@
-
+<html>
+<%@ taglib uri = "http://java.sun.com/jsp/jstl/core" prefix = "c" %>
+<%@ page isELIgnored="false"%>
+<c:set var="contextPath" value="${pageContext.request.contextPath}"/>
 	
-<nav class="navbar navbar-expand-md navbar-dark bg-primary">
+<nav class="navbar navbar-expand-md navbar-dark bg-primary mb-4">
 	<div class="container">
 		<a class="navbar-brand" href="#">Navbar</a>
 		<button class="navbar-toggler" type="button" data-toggle="collapse"
@@ -14,7 +17,7 @@
 				<li class="nav-item active"><a class="nav-link" href="#">Home
 						<span class="sr-only">(current)</span>
 				</a></li>
-				<li class="nav-item"><a class="nav-link" href="${contextPath}/product/all">Products</a>
+				<li class="nav-item"><a class="nav-link" href="${contextPath}/seller/view/showAll">Products</a>
 				</li>
 				<li class="nav-item"><a class="nav-link" href="${contextPath}/seller/home">Seller</a>
 				</li>
@@ -27,3 +30,4 @@
 		</div>
 	</div>
 </nav>
+</html>

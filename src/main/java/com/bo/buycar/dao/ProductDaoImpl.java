@@ -1,6 +1,7 @@
 package com.bo.buycar.dao;
 
 import java.io.Serializable;
+import java.util.List;
 
 import javax.transaction.Transactional;
 
@@ -47,17 +48,20 @@ public class ProductDaoImpl implements ProductDao{
 		session.flush();
 	}
 
-	@Override
-	public Product getProductAll() {
-		// TODO Auto-generated method stub
-		return null;
-	}
 
 	@Override
 	public Product getProductById(int id) {
 		Session session = sessionFactory.getCurrentSession();
 		Product product = session.get(Product.class, id);
 		return product;
+	}
+
+	@Override
+	public List<Product> getProductAll() {
+		Session session = sessionFactory.getCurrentSession();
+		List<Product> products = session.createQuery("from Product").list();
+		session.flush();
+		return products;
 	}
 
 }
