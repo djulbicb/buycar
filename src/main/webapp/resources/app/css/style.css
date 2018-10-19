@@ -8,3 +8,50 @@ border-radius: 3px;
 #description{
 	height: 150px;
 }
+.over-flow{
+	height: 200px;
+	overflow: hidden;
+	text-align: center;
+	
+}
+.over-flow img{
+	height:100%;
+	
+	overflow: hidden;
+}
+
+#deleteImageIcon{
+	width: 50px !important;
+	height: 50px !important;
+	background-color: red !important;
+	position:absolute !important;
+	float: right !important; 
+	border: 1px solid red !important; 	
+}
+.right-icon{
+	 position: absolute !important;
+    top: 8px !important;
+    right: 8px !important;
+    opacity: 0;
+    color: white;
+    float: right;
+    height: 50px;
+	width: 50px;
+	box-sizing: border-box;
+	display: inline-block;
+}
+
+.product-gallery-item{
+	background-color: red;
+	height: 200px;
+	width: 200px;
+}
+
+.relative {
+    position: relative;
+}
+.label.bottom-right {
+    position: absolute;
+    right: 2px;
+    bottom: 2px;
+}

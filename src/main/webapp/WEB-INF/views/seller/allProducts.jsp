@@ -53,6 +53,9 @@
 		</c:forEach>
 
 	</div>
+	
+
+	
 	<jsp:include page="../template/footer.jsp" />
 
 </body>
