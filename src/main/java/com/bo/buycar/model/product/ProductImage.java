@@ -12,6 +12,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 public class ProductImage implements Serializable {
 
@@ -25,8 +27,9 @@ public class ProductImage implements Serializable {
 	}
 	Date productImgDateAdded;
 	
-	@ManyToOne(fetch=FetchType.EAGER,cascade=CascadeType.ALL, targetEntity=Product.class)
+	@ManyToOne(fetch=FetchType.EAGER,   cascade = CascadeType.REFRESH, targetEntity=Product.class)
 	@JoinColumn(name="fk_product_image")
+	@JsonIgnore
 	Product product;
 
 	public int getProductImgId() {

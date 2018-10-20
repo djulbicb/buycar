@@ -33,9 +33,9 @@
 					</p>
 					<form action="${contextPath}/seller/deleteProduct/${product.productId}" method="post">
 					<input type="submit" class="btn btn-danger p-3" value="Delete product">
-					
+				<a href="${contextPath}/seller/view/showAll" type="button" class="btn btn-info rounded p-3">Cancel</a>	
 					</form>
-				<a href="${contextPath}/seller/view/showAll" type="button" class="btn btn-outline-info p-3">Cancel</a>
+				
 				
 				</div>
 

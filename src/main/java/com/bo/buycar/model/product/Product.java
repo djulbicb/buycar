@@ -53,7 +53,7 @@ public class Product implements Serializable{
 	@Transient
 	private List<MultipartFile> productImageFile;
 
-	@OneToMany(fetch=FetchType.EAGER, cascade=CascadeType.ALL, mappedBy="product")
+	@OneToMany(fetch=FetchType.EAGER, cascade=CascadeType.ALL, mappedBy="product", orphanRemoval=true)
 	List<ProductImage> productImages;
 
 	public int getProductId() {

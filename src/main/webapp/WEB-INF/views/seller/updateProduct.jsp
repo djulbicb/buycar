@@ -20,6 +20,10 @@
 	rel="stylesheet">
 <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
 
+<script
+  src="https://code.jquery.com/jquery-3.3.1.min.js"
+  integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+  crossorigin="anonymous"></script>
 
 </head>
 <body>
@@ -94,7 +98,7 @@
 				<hr>
 				<input type="submit" value="submit"
 					class="btn btn-lg text-white btn-primary"> <a
-					href="<c:url value='/admin'/>" class="btn btn-lg">Cancel</a>
+					href="<c:url value='/seller/view/showAll'/>" class="btn btn-lg">Cancel</a>
 			</div>
 
 		</form:form>
@@ -104,9 +108,9 @@
 			<c:forEach items="${product.productImages}" var="image">
 				<div class="col-3  p-1">
 				
-				<div class="border rounded over-flow position-relative bg-muted">
+				<div class="border rounded over-flow position-relative bg-muted" id="image-div-${image.productImgId}">
 			
-				<span class="position-absolute"><button class="p-2 m-2 btn btn-primary"><i class="fa fa-times"></i></button></span>
+				<span class="position-absolute"><button class="btnDelImage p-2 m-2 btn btn-primary" data-img-id="${image.productImgId}"><i class="fa fa-times"></i></button></span>
 				
 				<img
 						height="200"
@@ -119,7 +123,53 @@
 		</div>
 
 	</div>
+	
+	
 <br><br><br><br>
+<script type="text/javascript">
+
+$('.btnDelImage').on('click', function(event){
+     $.ajax({ 
+         type: "GET",
+         dataType: "json",
+         url: "http://localhost:8080/buycar/rest/productImage/get/40",
+         success: function(data){        
+            console.log(data);
+         }
+     });
+
+     var id=$(this).attr('data-img-id');
+     
+     console.log(id);
+
+     var imageDiv = $("#image-div-"+id);
+     console.log(imageDiv); // .animate({opacity:0})
+     imageDiv.fadeOut( "slow", function() {
+    	 imageDiv.css('visibility','visible');
+         $.ajax({ 
+             type: "DELETE",
+             dataType: "json",
+             url: "http://localhost:8080/buycar/rest/productImage/delete/" + id,
+             success: function(data){        
+                console.log(data);
+                
+             }
+         });
+    	 
+    	  });
+     
+
+     
+});
+
+function deleteImage(event) {
+	//console.log(event);	
+	
+
+	   
+}
+</script>
+
 	<jsp:include page="../template/footer.jsp" />
 </body>
 </html>
