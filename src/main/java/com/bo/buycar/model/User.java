@@ -2,7 +2,6 @@ package com.bo.buycar.model;
 
 import javax.persistence.MappedSuperclass;
 
-@MappedSuperclass
 public class User{
 
 	int id;

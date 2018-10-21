@@ -5,26 +5,21 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.CascadeType;
-import javax.persistence.Convert;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Transient;
-import javax.validation.constraints.DecimalMin;
-import javax.validation.constraints.Digits;
-import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.Pattern;
-import javax.validation.constraints.Size;
 
-import org.hibernate.validator.constraints.Length;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.bo.buycar.model.Advertisment;
 import com.sun.istack.internal.NotNull;
 
 @Entity
@@ -56,6 +51,10 @@ public class Product implements Serializable{
 	@OneToMany(fetch=FetchType.EAGER, cascade=CascadeType.ALL, mappedBy="product", orphanRemoval=true)
 	List<ProductImage> productImages;
 
+	@OneToOne(targetEntity=Advertisment.class, mappedBy="product")
+	@JoinColumn(name="fk_product_advertisment")
+	Advertisment advertisment;
+	
 	public int getProductId() {
 		return productId;
 	}

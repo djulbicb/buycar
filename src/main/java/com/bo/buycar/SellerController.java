@@ -25,10 +25,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.bo.buycar.dao.AdvertismentDao;
 import com.bo.buycar.dao.ProductDao;
-import com.bo.buycar.model.product.Advertisment;
+import com.bo.buycar.model.Advertisment;
 import com.bo.buycar.model.product.Product;
 import com.bo.buycar.model.product.ProductImage;
+
 
 @Controller
 @RequestMapping("/seller")
@@ -40,6 +42,10 @@ public class SellerController {
 	{
 		return e.getMessage();
 	}*/
+	
+	@Autowired
+	AdvertismentDao advertismentDao; 
+	
 	
 	@GetMapping("/addProduct")
 	public String showAddProduct(Model model) {
@@ -90,7 +96,13 @@ public class SellerController {
 			}
 		}
 		
-		productDao.addProduct(product);
+		advertisment.setProduct(product);
+		advertisment.setActive(true);
+		advertisment.setLastModifiedDate(new Date());
+		advertisment.setPublishDate(new Date());
+		advertismentDao.addAdvertisment(advertisment);
+		
+		
 		
 		return "redirect:/seller/view/showAll";
 	}
@@ -203,3 +215,4 @@ public class SellerController {
 	}
 	
 }
+
