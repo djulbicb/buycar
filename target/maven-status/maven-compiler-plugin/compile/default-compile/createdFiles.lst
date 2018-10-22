@@ -1,0 +1,15 @@
+com\bo\buycar\model\product\Product.class
+com\bo\buycar\dao\ProductDao.class
+com\bo\buycar\model\product\ProductImage.class
+com\bo\buycar\model\User.class
+com\bo\buycar\dao\impl\AdvertismentDaoImpl.class
+com\bo\buycar\model\Advertisment.class
+com\bo\buycar\model\Seller.class
+com\bo\buycar\ProductController.class
+com\bo\buycar\dao\AdvertismentDao.class
+com\bo\buycar\dao\impl\ProductImageDaoImpl.class
+com\bo\buycar\dao\impl\ProductDaoImpl.class
+com\bo\buycar\SellerController.class
+com\bo\buycar\controller\rest\ProductImageController.class
+com\bo\buycar\dao\ProductImageDao.class
+com\bo\buycar\HomeController.class

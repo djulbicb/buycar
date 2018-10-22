@@ -1,6 +1,7 @@
 <html>
-<%@ taglib uri = "http://java.sun.com/jsp/jstl/core" prefix = "c" %>
 <%@ page isELIgnored="false"%>
+<%@ include file="includes.jsp"%>
+
 <c:set var="contextPath" value="${pageContext.request.contextPath}"/>
 	
 <nav class="navbar navbar-expand-md navbar-dark bg-primary mb-4">
@@ -21,7 +22,8 @@
 				</li>
 				<li class="nav-item"><a class="nav-link" href="${contextPath}/seller/home">Seller</a>
 				</li>
-				<li class="nav-item"><a class="nav-link" href="#">About</a></li>
+				
+				
 			</ul>
 			<form class="form-inline my-2 my-lg-0">
 				<input class="form-control mr-sm-2" placeholder="Search" type="text">

@@ -1,4 +1,4 @@
-
+<%@ include file="../template/includes.jsp"%>
 <html lang="en">
 <head>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
@@ -24,6 +24,17 @@
 
 	<div class="container">
 
+<sec:authentication var="user" property="principal" />
+<p>Hello ${user.username}</p>
+<p>Hello ${user.authorities}</p>
+<sec:authorize access="hasAuthority('Admin')">
+					<li class="nav-item"><a class="nav-link" href="/buycar/admin">Users</a></li>
+				</sec:authorize>
+<p>
+	<a class="btn btn-primary" href="/buycar/logout">
+		Logout
+	</a>
+</p>
 <a href="${contextPath}/seller/addProduct" class="btn btn-block bg-primary">Add product</a>
 		<h1>All products</h1>
 		<p>Edit your products</p>

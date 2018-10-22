@@ -19,7 +19,10 @@
 <jsp:include page="template/navbar.jsp" />
 
 <h2>Hello World Baby!</h2>
+<sec:authentication var="user" property="principal" />
+<p>Hello ${user.username}</p>
 
+<p>Hello ${user.authorities}</p>
 <jsp:include page="template/footer.jsp" />
 
   </body>
