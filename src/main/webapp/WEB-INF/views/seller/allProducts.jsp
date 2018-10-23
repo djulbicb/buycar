@@ -16,56 +16,108 @@
 <link
 	href="<c:url value='/resources/app/css/sandstone/bootstrap.min.css'/>"
 	rel="stylesheet">
+<link rel="stylesheet"
+	href="https://use.fontawesome.com/releases/v5.1.0/css/all.css"
+	integrity="sha384-lKuwvrZot6UHsBSfcMvOkWwlCMgc0TaWr+30HWe3a4ltaBwTZhyTEggF5tJv8tbt"
+	crossorigin="anonymous">
 
+<style type="text/css">
+.no-gutter-card-deck.card-columns {
+	column-gap: 1;
+}
+
+.no-gutter-card-deck>.card {
+	margin: 1;
+}
+</style>
 </head>
 <body>
-
+	<sec:authentication var="user" property="principal" />
 	<jsp:include page="../template/navbar.jsp" />
 
 	<div class="container">
 
-<sec:authentication var="user" property="principal" />
-<p>Hello ${user.username}</p>
-<p>Hello ${user.authorities}</p>
-<sec:authorize>
-					<li class="nav-item"><a class="nav-link" href="/buycar/admin">Users</a></li>
-				</sec:authorize>
-				
 
 
-<a href="${contextPath}/seller/addProduct" class="btn btn-block bg-primary">Add product</a>
-		<h1>All products</h1>
-		<p>Edit your products</p>
-		<c:forEach items="${products}" var="product">
 
-			<div class="card mb-3">
-				<div class="card-body">
+		<div class="card text-white bg-info mb-3">
+			<div class="card-header">Hello ${user.username}!</div>
+			<div class="card-body">
+				<h4 class="card-title">Info card title</h4>
+				<p class="card-text">Some quick example text to build on the
+					card title and make up the bulk of the card's content.</p>
+			</div>
+		</div>
 
-					<div class="row">
-						<div class="col-9">
-							<h4 class="card-title">${product.productName}</h4>
-							<h6 class="card-subtitle mb-2 text-muted">Date created:
-								2018-10-10</h6>
-							<p class="card-text">${product.productDescription}</p>
-							<hr>
-							<a href="${contextPath}/seller/updateProduct/${product.productId}" class="card-link btn btn-lg text-white btn-primary">Edit
-								product</a> <a href="${contextPath}/seller/deleteProduct/${product.productId}" class="card-link">Delete product</a>
+		<span class="btn-group" role="group" aria-label="Basic example">
+			<button class="btn disabled" disabled="disabled">
+				<i class="fas fa-cog"></i>
+			</button> <a class="btn btn-primary" href="${contextPath}/seller/addProduct">Profile
+				settings</a>
 
+		</span> <span class="btn-group" role="group" aria-label="Basic example">
+			<button class="btn disabled" disabled="disabled">
+				<i class="fa fa-plus" aria-hidden="true"></i>
+			</button> <a class="btn btn-primary" href="${contextPath}/seller/addProduct">Add
+				Product</a>
+		</span>
+
+		<h1 class="mt-2"></h1>
+		<p></p>
+
+		<div class="blockquote text-left">
+			<h2 class="mb-0 h3">All products.</h2>
+			<p class="text-muted lead font-weight-light">Edit your products</p>
+		</div>
+
+		<div class="container">
+			<div class="row">
+
+				<c:forEach items="${products}" var="product">
+
+					<div class="col-sm-4 mb-2 m-0 p-1 d-flex align-items-stretch">
+						<div class="card">
+							<img class="card-img-top img-fluid"
+								src="${contextPath}/resources/img/${product.productImages[0].productImgName}"
+								alt="Card image cap">
+							<div class=" card-body d-flex flex-column card-block p-2">
+								<h4 class="card-title">Card title</h4>
+								<p class="card-text">This is a longer card with supporting
+									text below as a natural lead-in to additional content. This
+									content is a little bit longer.</p>
+
+
+
+								<div style="margin-top: auto;" class="align-self-end w-100">
+									<div class="btn-group d-flex" role="group" aria-label="">
+
+										<a class="btn btn-Primary w-100"
+											href="${contextPath}/seller/updateProduct/${product.productId}">Edit
+											product</a>
+										<button type="button" class="btn btn-default w-30">
+											<a
+												href="${contextPath}/seller/deleteProduct/${product.productId}"><i
+												class="fas fa-times"></i></a>
+										</button>
+
+									</div>
+								</div>
+
+
+							</div>
 						</div>
-						<div class="col-3">
-							<img width="100%" src="${contextPath}/resources/img/${product.productImages[0].productImgName}">
-						</div>
+
 					</div>
-				</div>
+
+				</c:forEach>
 
 			</div>
-		</c:forEach>
-
+		</div>
 	</div>
-	
+	<br />
+	<br />
+	<br />
 
-	
 	<jsp:include page="../template/footer.jsp" />
-
 </body>
 </html>

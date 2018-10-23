@@ -6,6 +6,8 @@ import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -20,6 +22,7 @@ import javax.validation.constraints.NotEmpty;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.bo.buycar.model.Advertisment;
+import com.bo.buycar.model.auth.UserStatus;
 import com.sun.istack.internal.NotNull;
 
 @Entity
@@ -54,6 +57,9 @@ public class Product implements Serializable{
 	@OneToOne(targetEntity=Advertisment.class, mappedBy="product")
 	@JoinColumn(name="fk_product_advertisment")
 	Advertisment advertisment;
+	
+	@Enumerated(EnumType.STRING)
+	private ProductCategory productCategory;
 	
 	public int getProductId() {
 		return productId;
@@ -116,5 +122,21 @@ public class Product implements Serializable{
 		return "Product [productId=" + productId + ", productName=" + productName + ", productDescription="
 				+ productDescription + ", productPrice=" + productPrice + ", productYear=" + productYear
 				+ ", productImageFile=" + productImageFile + ", productImages=" + productImages + "]";
+	}
+
+	public Advertisment getAdvertisment() {
+		return advertisment;
+	}
+
+	public void setAdvertisment(Advertisment advertisment) {
+		this.advertisment = advertisment;
+	}
+
+	public ProductCategory getProductCategory() {
+		return productCategory;
+	}
+
+	public void setProductCategory(ProductCategory productCategory) {
+		this.productCategory = productCategory;
 	}
 }

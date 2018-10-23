@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.bo.buycar.dao.ProductDao;
+import com.bo.buycar.model.Advertisment;
 import com.bo.buycar.model.product.Product;
 
 @Repository
@@ -41,13 +42,17 @@ public class ProductDaoImpl implements ProductDao{
 	public void deleteProduct(int id) {
 		Session session = sessionFactory.getCurrentSession();
 		Product product = session.get(Product.class, id);
+		Advertisment advertisment = product.getAdvertisment();
+		session.delete(advertisment);
 		session.delete(product);
 	}
 
 	@Override
 	public void deleteProduct(Product product) {
 		Session session = sessionFactory.getCurrentSession();
-		session.delete(product);
+		
+		Advertisment advertisment = product.getAdvertisment();
+		session.delete(advertisment);
 		session.flush();
 	}
 

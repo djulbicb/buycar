@@ -18,11 +18,34 @@
 	
 <jsp:include page="template/navbar.jsp" />
 
-<h2>Hello World Baby!</h2>
-<sec:authentication var="user" property="principal" />
-<p>Hello ${user.username}</p>
+<div class="container">
+<div class="blockquote text-left">
+			<h2 class="mb-0 h3">View products</h2>
+			<p class="text-muted lead font-weight-light">Pick category</p>
+		</div>
 
-<p>Hello ${user.authorities}</p>
+
+</span> <span class="btn-group" role="group" aria-label="Basic example">
+			<button class="btn disabled" disabled="disabled">
+				<i class="fa fa-plus" aria-hidden="true"></i>
+			</button> <a class="btn btn-primary" href="${contextPath}/seller/addProduct">Add
+				Product</a>
+		</span>
+		
+		</span> <span class="btn-group" role="group" aria-label="Basic example">
+			<button class="btn disabled" disabled="disabled">
+				<i class="fa fa-plus" aria-hidden="true"></i>
+			</button> <a class="btn btn-primary" href="${contextPath}/seller/addProduct">Add
+				Product</a>
+		</span>
+		
+		</span> <span class="btn-group" role="group" aria-label="Basic example">
+			<button class="btn disabled" disabled="disabled">
+				<i class="fa fa-plus" aria-hidden="true"></i>
+			</button> <a class="btn btn-primary" href="${contextPath}/seller/addProduct">Add
+				Product</a>
+		</span>
+</div>
 <jsp:include page="template/footer.jsp" />
 
   </body>
