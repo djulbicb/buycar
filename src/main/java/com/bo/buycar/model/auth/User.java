@@ -2,16 +2,23 @@ package com.bo.buycar.model.auth;
 
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+
+import com.bo.buycar.model.Advertisment;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
@@ -22,11 +29,11 @@ public class User {
 	int id;
 
 	public User() {
-		super();
+		
 	}
 
 	public User(int id, String username, String password) {
-		super();
+		
 		this.id = id;
 		this.username = username;
 		this.password = password;
@@ -35,11 +42,19 @@ public class User {
 	String username;
 	String password;
 
-	@ManyToMany
+	@ManyToMany(fetch=FetchType.EAGER, cascade=CascadeType.ALL)
+	@Fetch(value = FetchMode.SUBSELECT)
 	@JoinTable(name = "UserAndRoles", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
 	@JsonIgnore
 	List<Role> roles;
 
+	@OneToMany(fetch=FetchType.EAGER, cascade=CascadeType.ALL, mappedBy="buyer", orphanRemoval=true)
+	@Fetch(value = FetchMode.SUBSELECT)
+	List<Advertisment> advertsSold;
+	
+	@OneToMany(fetch=FetchType.EAGER, cascade=CascadeType.ALL, mappedBy="seller", orphanRemoval=true)
+	@Fetch(value = FetchMode.SUBSELECT)
+	List<Advertisment> advertsBought;
 	
 	@Enumerated(EnumType.STRING)
 	private UserStatus status;
@@ -88,5 +103,21 @@ public class User {
 	public String toString() {
 		return "User [id=" + id + ", username=" + username + ", password=" + password + ", roles=" + roles + ", status="
 				+ status + "]";
+	}
+
+	public List<Advertisment> getAdvertsSold() {
+		return advertsSold;
+	}
+
+	public void setAdvertsSold(List<Advertisment> advertsSold) {
+		this.advertsSold = advertsSold;
+	}
+
+	public List<Advertisment> getAdvertsBought() {
+		return advertsBought;
+	}
+
+	public void setAdvertsBought(List<Advertisment> advertsBought) {
+		this.advertsBought = advertsBought;
 	}
 }

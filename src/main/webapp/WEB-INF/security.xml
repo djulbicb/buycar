@@ -19,11 +19,11 @@
 
 	<security:http use-expressions="true">
 		<!-- <security:intercept-url pattern="/**" access="isAuthenticated()" /> 
-			<security:intercept-url pattern="/seller/**" access="hasRole('Seller')" /> -->
+			<security:intercept-url pattern="/seller/**" access="hasRole('USER')" /> -->
 		<security:intercept-url pattern="/"
 			access="permitAll" />
 		<security:intercept-url pattern="/seller/**"
-			access="hasAuthority('SELLER')" />
+			access="hasAuthority('USER')" />
 
 		<security:form-login login-page="/login" default-target-url="/index" authentication-failure-url="/login?error"/>
 		<security:logout logout-success-url="/login?logout" logout-url="/logout"

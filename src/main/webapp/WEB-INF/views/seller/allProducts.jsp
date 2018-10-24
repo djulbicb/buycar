@@ -73,15 +73,16 @@
 		<div class="container">
 			<div class="row">
 
-				<c:forEach items="${products}" var="product">
-
+				<c:forEach items="${adverts}" var="advert">
+s
 					<div class="col-sm-4 mb-2 m-0 p-1 d-flex align-items-stretch">
 						<div class="card">
 							<img class="card-img-top img-fluid"
 								src="${contextPath}/resources/img/${product.productImages[0].productImgName}"
 								alt="Card image cap">
 							<div class=" card-body d-flex flex-column card-block p-2">
-								<h4 class="card-title">Card title</h4>
+								<h4 class="card-title">${product.productName}</h4>
+								
 								<p class="card-text">This is a longer card with supporting
 									text below as a natural lead-in to additional content. This
 									content is a little bit longer.</p>

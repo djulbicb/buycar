@@ -3,6 +3,7 @@ package com.bo.buycar;
 import java.io.File;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.security.Principal;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -14,6 +15,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -27,9 +31,13 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.bo.buycar.dao.AdvertismentDao;
 import com.bo.buycar.dao.ProductDao;
+import com.bo.buycar.dao.UserDao;
 import com.bo.buycar.model.Advertisment;
+import com.bo.buycar.model.auth.User;
 import com.bo.buycar.model.product.Product;
+import com.bo.buycar.model.product.ProductCategory;
 import com.bo.buycar.model.product.ProductImage;
+import com.bo.buycar.service.impl.UserDetailsServiceImpl;
 
 
 @Controller
@@ -46,12 +54,14 @@ public class SellerController {
 	@Autowired
 	AdvertismentDao advertismentDao; 
 	
+	@Autowired
+	UserDao userDao;
 	
 	@GetMapping("/addProduct")
-	public String showAddProduct(Model model) {
-		System.out.println("GET");
+	public String showAddProduct(Model model) {	
 		Product product = new Product();
 		
+		ProductCategory[] productCategories = ProductCategory.values();
 		
 		Calendar cal= Calendar.getInstance();
 		DateFormat sdf = new SimpleDateFormat("yyyy");
@@ -59,6 +69,7 @@ public class SellerController {
 		
 		product.setProductYear(year);
 		model.addAttribute("product", product);
+		model.addAttribute("productCategories", productCategories);
 		return "seller/addProduct";
 	}
 	
@@ -66,7 +77,7 @@ public class SellerController {
 	ProductDao productDao;
 	
 	@PostMapping("/addProduct")
-	public String jebiSe(@Valid @ModelAttribute("product") Product product, BindingResult result, HttpServletRequest request) {
+	public String jebiSe(@Valid @ModelAttribute("product") Product product, BindingResult result, HttpServletRequest request, @AuthenticationPrincipal Principal principal) {
 		if (result.hasErrors()) {
 			return "seller/addProduct";
 		}
@@ -76,8 +87,16 @@ public class SellerController {
 		String rootDirectory = request.getSession().getServletContext().getRealPath("/");
 		Path path = Paths.get(rootDirectory + "/resources/img/" + product.getProductId() + ".png");
 		
-		Advertisment advertisment = new Advertisment();
+
+		String username = principal.getName();
+		System.out.println(username);
+		User user = userDao.getUserByUsername(username);
+		
+		
+		
 		System.out.println(product);
+		
+		
 		
 		if (product.getProductImageFile() != null && product.getProductImageFile().size() > 0) {
 			List<MultipartFile> productImageFile = product.getProductImageFile();
@@ -96,56 +115,37 @@ public class SellerController {
 			}
 		}
 		
+		Advertisment advertisment = new Advertisment();
 		advertisment.setProduct(product);
+		product.setAdvertisment(advertisment);
+		advertisment.setSeller(user);
 		advertisment.setActive(true);
 		advertisment.setLastModifiedDate(new Date());
 		advertisment.setPublishDate(new Date());
-		advertismentDao.addAdvertisment(advertisment);
 		
 		
-		
+		advertismentDao.addAdvertisment(advertisment);			
+				
 		return "redirect:/seller/view/showAll";
 	}
-	
-	/*
-	@PostMapping("/addProduct")
-	public String addProduct(@Valid @ModelAttribute("product") Product product, Model model, HttpServletRequest request, BindingResult result) {
-		System.out.println("POST");
-		if (result.hasErrors()) {
-			return "seller/addProduct";
-		}
-		String rootDirectory = request.getSession().getServletContext().getRealPath("/");
-		Path path = Paths.get(rootDirectory + "/resources/img/" + product.getProductId() + ".png");
-		
-		Advertisment advertisment = new Advertisment();
-		System.out.println(product);
-		
-		if (product.getProductImageFile() != null && product.getProductImageFile().size() > 0) {
-			List<MultipartFile> productImageFile = product.getProductImageFile();
-			
-			for (MultipartFile file : productImageFile) {
-				path = Paths.get(rootDirectory + "/resources/img/" + file.getOriginalFilename());
-				try {
-					file.transferTo(new File(path.toString()));
-					ProductImage img = new ProductImage();
-					img.setProductImgName(file.getOriginalFilename());
-					img.setProduct(product);
-					product.getProductImages().add(img );
-				} catch (Exception e) {
-					throw new RuntimeException("Product image serving failed", e);
-				}
-			}
-		}
-		
-		productDao.addProduct(product);
-		return "redirect:/seller/view/showAll";
-	}
-	*/
+
 	
 	@GetMapping("/view/showAll")
-	public String showAllProducts(Model model) {
-		List<Product> products = productDao.getProductAll();
-		model.addAttribute("products", products);
+	public String showAllProducts(Model model, @AuthenticationPrincipal Principal principal) {
+		// List<Product> products = productDao.getProductAll();
+		
+		String username = principal.getName();
+		System.out.println(username);
+		User user = userDao.getUserByUsername(username);
+		System.out.println(user);
+		List<Advertisment> advertsSold = user.getAdvertsSold();
+		System.out.println(advertsSold);
+		
+		// List<Product> products = productDao.getProductAll();
+		//model.addAttribute("products", products);
+		System.out.println(advertsSold);
+		System.out.println(advertsSold.size());
+		model.addAttribute("adverts", advertsSold);
 		return "seller/allProducts";
 	}
 	

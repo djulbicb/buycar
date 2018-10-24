@@ -14,7 +14,9 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
+import com.bo.buycar.model.auth.User;
 import com.bo.buycar.model.product.Product;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 
 
@@ -27,9 +29,19 @@ public class Advertisment {
 
 	@OneToOne(targetEntity=Product.class, fetch=FetchType.EAGER, orphanRemoval=true, cascade=CascadeType.ALL)
 	Product product;
+	
+	@ManyToOne(targetEntity=User.class, fetch=FetchType.EAGER,cascade=CascadeType.ALL)
+	@JoinColumn(name="fk_ad_buyer")
+	@JsonIgnore
+	User buyer;
 
+	@ManyToOne(targetEntity=User.class, fetch=FetchType.EAGER,cascade=CascadeType.ALL)
+	@JoinColumn(name="fk_ad_seller")
+	@JsonIgnore
+	User seller;
+	
 	boolean isActive;
-
+	
 	Date publishDate;
 
 	Date lastModifiedDate;
@@ -78,6 +90,22 @@ public class Advertisment {
 
 	public void setProduct(Product product) {
 		this.product = product;
+	}
+
+	public User getBuyer() {
+		return buyer;
+	}
+
+	public void setBuyer(User buyer) {
+		this.buyer = buyer;
+	}
+
+	public User getSeller() {
+		return seller;
+	}
+
+	public void setSeller(User seller) {
+		this.seller = seller;
 	}
 
 

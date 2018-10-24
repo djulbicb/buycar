@@ -3,6 +3,7 @@ package com.bo.buycar.dao;
 import java.util.List;
 
 import com.bo.buycar.model.Advertisment;
+import com.bo.buycar.model.auth.User;
 import com.bo.buycar.model.product.Product;
 
 public interface AdvertismentDao {

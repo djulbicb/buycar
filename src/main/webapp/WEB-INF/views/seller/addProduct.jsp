@@ -37,10 +37,17 @@
 				<form:errors path="productName" cssClass="form-error text-alert" />
 			</div>
 
+			<div class="form-group">
+				<label for="name">Product category:</label>
+				<c:forEach var="pCat" items="${productCategories}" >
+					<form:radiobutton cssClass="m-1" path="productCategory" label="${pCat.name}" value="${pCat}"/>
+				</c:forEach>
+			</div>
+
 			<div class="row">
 				<div class="col">
 					<div class="form-group">
-						<label for="year">Product Year</label> 
+						<label for="year">Product Year</label>
 
 						<form:input type="number" path="productYear" id="year"
 							required="true" class="form-control mb-1" />
@@ -52,20 +59,20 @@
 
 
 					<div class="form-group">
-						<label class="control-label">Input price</label> 
+						<label class="control-label">Input price</label>
 						<div class="form-group">
 							<div class="input-group mb-1 ">
 								<div class="input-group-prepend">
 									<span class="input-group-text">$</span>
 								</div>
-								<form:input path="productPrice" id="price" type="number" class="form-control" min="0" step="any"
-									required="true" />
-									
-								
+								<form:input path="productPrice" id="price" type="number"
+									class="form-control" min="0" step="any" required="true" />
+
+
 							</div>
 							<form:errors path="productPrice" cssClass="form-error" />
 						</div>
-						
+
 					</div>
 
 
@@ -75,10 +82,10 @@
 
 			<div class="form-group">
 				<label for="description">Product Description</label>
-				
+
 				<form:textarea path="productDescription" id="description"
 					class="form-control mb-1" />
-					<form:errors path="productDescription" cssClass="form-error" />
+				<form:errors path="productDescription" cssClass="form-error" />
 			</div>
 
 

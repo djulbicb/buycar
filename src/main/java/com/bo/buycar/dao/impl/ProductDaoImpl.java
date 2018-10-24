@@ -7,12 +7,14 @@ import javax.transaction.Transactional;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.bo.buycar.dao.ProductDao;
 import com.bo.buycar.model.Advertisment;
 import com.bo.buycar.model.product.Product;
+import com.bo.buycar.model.product.ProductCategory;
 
 @Repository
 @Transactional
@@ -68,6 +70,25 @@ public class ProductDaoImpl implements ProductDao{
 	public List<Product> getProductAll() {
 		Session session = sessionFactory.getCurrentSession();
 		List<Product> products = session.createQuery("from Product").list();
+		session.flush();
+		return products;
+		
+	}
+
+	@Override
+	public List<Product> getProductByCategory(String productCategory) {
+		Session session = sessionFactory.getCurrentSession();
+		ProductCategory category = ProductCategory.valueOf(productCategory);
+		List<Product> products = null;
+		if ( category != null) {
+			Query query = session.createQuery("from Product p WHERE p.productCategory = :productCategory");
+			query.setParameter("productCategory", category);
+			products  = query.list();
+		} else {
+			products = session.createQuery("from Product").list();
+		}
+		
+		
 		session.flush();
 		return products;
 	}
