@@ -80,4 +80,12 @@ public class UserDaoImpl implements UserDao {
 		return (User)criteria.uniqueResult();
 	}
 
+	@Override
+	public User getUserByEmail(String email) {
+		Session session = sessionFactory.getCurrentSession();
+		Criteria criteria = session.createCriteria(User.class);
+		criteria.add(Restrictions.eq("email", email));
+		return (User)criteria.uniqueResult();
+	}
+
 }

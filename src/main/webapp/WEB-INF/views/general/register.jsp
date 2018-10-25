@@ -41,6 +41,7 @@
 
 
 <form:errors path="username" cssClass="form-error text-alert" />
+${usernameError}
 					<div class="form-group">
 						<div class="input-group mb-2">
 							<div class="input-group-prepend">
@@ -72,6 +73,7 @@
 
 
 <form:errors path="email" cssClass="form-error text-alert" />
+${emailError}
 					<div class="form-group">
 						<div class="input-group mb-2">
 							<div class="input-group-prepend">

@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.bo.buycar.dao.AdvertismentDao;
 import com.bo.buycar.dao.ProductDao;
 import com.bo.buycar.dao.UserDao;
+import com.bo.buycar.service.UserService;
 import com.bo.buycar.dto.PageList;
 import com.bo.buycar.model.Advertisment;
 import com.bo.buycar.model.auth.Role;
@@ -39,15 +40,9 @@ public class IndexController {
 	
 	@Autowired
 	AdvertismentDao advertismentDao;
-	
-	@Autowired 
-	UserDao userDao;
-	
-	
-
 		
-
-	
+	@Autowired
+	UserService userService;	
 	
 	
 	@GetMapping("/")
@@ -77,25 +72,43 @@ public class IndexController {
 		return "general/register";
 	}
 	
+	
 	@PostMapping("/register")
 	public String postRegister(Model model, @Valid @ModelAttribute("user") User user, BindingResult result) {
 		if (result.hasErrors()) {
 			return "general/register";
 		}
 		
-
-		userDao.addUser(user);
-		return "redirect:/login";
+		if (userService.findIfEmailExists(user.getEmail())) {
+			model.addAttribute("emailError", "Email already exists, enter new user");
+			return "general/register";
+		}
+		
+		if (userService.findIfUsernameExists(user.getUsername())) {
+			model.addAttribute("usernameError", "Username already exists, enter new user");
+			return "general/register";
+		}
+		
+		userService.addUser(user);
+		return "redirect:/login?register";
 	}
 	
 	@GetMapping("/login")
-	public String getLogin(@RequestParam(name="logout", required=false) String logout, @RequestParam(name="error", required=false) String error, Model model) {
+	public String getLogin(
+			@RequestParam(name="logout", required=false) String logout, 
+			@RequestParam(name="error", required=false) String error, 
+			@RequestParam(name="register", required=false) String register,
+			Model model) {
 		if (error != null) {
 			model.addAttribute("msg", "Invalid username and password");
 		}
 
 		if (logout!= null) {
 			model.addAttribute("msg", "You logged out sucesfully");
+		}
+		
+		if (register!= null) {
+			model.addAttribute("msg", "You registered sucesfully. Enter info to login.");
 		}
 		return "general/login";
 	}
