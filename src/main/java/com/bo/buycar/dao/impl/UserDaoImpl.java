@@ -1,5 +1,6 @@
 package com.bo.buycar.dao.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.transaction.Transactional;
@@ -12,7 +13,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.bo.buycar.dao.UserDao;
+import com.bo.buycar.model.auth.Role;
 import com.bo.buycar.model.auth.User;
+import com.bo.buycar.model.auth.UserStatus;
 import com.bo.buycar.model.product.Product;
 
 @Repository
@@ -48,6 +51,7 @@ public class UserDaoImpl implements UserDao {
 	@Override
 	public void deleteUser(User user) {
 		Session session = sessionFactory.getCurrentSession();
+		
 		session.delete(user);
 		session.flush();
 		

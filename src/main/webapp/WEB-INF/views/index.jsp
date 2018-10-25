@@ -24,123 +24,128 @@
 
 
 
-
 	<div class="container">
-
 
 		<div class="blockquote text-left">
 			<h2 class="mb-0 h3">View products</h2>
 			<p class="text-muted lead font-weight-light">Pick category</p>
 		</div>
 
+		<%@page import="com.bo.buycar.model.product.ProductCategory"%>
+		<c:set var="productCategories" value="<%=ProductCategory.values()%>" />
 
-		</span> <span class="btn-group" role="group" aria-label="Basic example">
-			<button class="btn disabled" disabled="disabled">
-				<i class="fa fa-plus" aria-hidden="true"></i>
-			</button> <a class="btn btn-primary" href="${contextPath}/seller/addProduct">Add
-				Product</a>
-		</span> </span> <span class="btn-group" role="group" aria-label="Basic example">
-			<button class="btn disabled" disabled="disabled">
-				<i class="fa fa-plus" aria-hidden="true"></i>
-			</button> <a class="btn btn-primary" href="${contextPath}/seller/addProduct">Add
-				Product</a>
-		</span> </span> <span class="btn-group" role="group" aria-label="Basic example">
-			<button class="btn disabled" disabled="disabled">
-				<i class="fa fa-plus" aria-hidden="true"></i>
-			</button> <a class="btn btn-primary" href="${contextPath}/seller/addProduct">Add
-				Product</a>
-		</span>
-
-<p>${ad.product.productName}</p>
-					<p>${ad.seller.username}</p>
-					
-					
-		<div class="row">
-
-			<c:forEach items="${advertisments}" var="ad">
-				<div class="col-sm-4 mb-2 m-0 p-1 d-flex align-items-stretch">
-					<div class="card">
-						<img class="card-img-top img-fluid"
-							src="${contextPath}/resources/img/${ad.product.productImages[0].productImgName}"
-							alt="Card image cap">
-						<div class=" card-body d-flex flex-column card-block p-2">
-							<h4 class="card-title">${ad.product.productName}</h4>
-
-							<p class="card-text">This is a longer card with supporting
-								text below as a natural lead-in to additional content. This
-								content is a little bit longer.</p>
-
-
-
-							<div style="margin-top: auto;" class="align-self-end w-100">
-								<div class="btn-group d-flex" role="group" aria-label="">
-
-									<a class="btn btn-Primary w-100"
-										href="${contextPath}/seller/updateProduct/${ad.product.productId}">Edit
-										product</a>
-									<button type="button" class="btn btn-default w-30">
-										<a
-											href="${contextPath}/seller/deleteProduct/${ad.product.productId}"><i
-											class="fas fa-times"></i></a>
-									</button>
-
-								</div>
-							</div>
-
-
-						</div>
-					</div>
-				</div>
-				<hr>
+		<div class="btn-group mb-1 d-flex" role="group" aria-label="">
+<c:forEach var="pCat" items="${productCategories}">
+				<a class="btn btn-primary w-100 m-1"
+				href="${contextPath}/?productCategory=${pCat}">${pCat}</a>
 			</c:forEach>
+			<a class="btn btn-info w-100 m-1"
+				href="${contextPath}">Reset</a>
+			</button>
+
 
 		</div>
 
-		<div class="row">
-
-			<c:forEach items="${products}" var="product">
-
-				<div class="col-sm-4 mb-2 m-0 p-1 d-flex align-items-stretch">
-					<div class="card">
-						<img class="card-img-top img-fluid"
-							src="${contextPath}/resources/img/${product.productImages[0].productImgName}"
-							alt="Card image cap">
-						<div class=" card-body d-flex flex-column card-block p-2">
-							<h4 class="card-title">${product.productName}</h4>
-
-							<p class="card-text">This is a longer card with supporting
-								text below as a natural lead-in to additional content. This
-								content is a little bit longer.</p>
 
 
 
-							<div style="margin-top: auto;" class="align-self-end w-100">
-								<div class="btn-group d-flex" role="group" aria-label="">
+		<p>${ad.product.productName}</p>
+		<p>${ad.seller.username}</p>
 
-									<a class="btn btn-Primary w-100"
-										href="${contextPath}/seller/updateProduct/${product.productId}">Edit
-										product</a>
-									<button type="button" class="btn btn-default w-30">
-										<a
-											href="${contextPath}/seller/deleteProduct/${product.productId}"><i
-											class="fas fa-times"></i></a>
-									</button>
+
+		<div class="container">
+			<div class="row">
+
+				<c:forEach items="${advertisments}" var="advert">
+
+					<div class="col-sm-3 mb-2 m-0 p-1 d-flex align-items-stretch">
+						<div class="card">
+
+							<c:choose>
+								<c:when test="${not empty advert.product.productImages[0]}">
+									<img class="card-img-top img-fluid"
+										src="${contextPath}/resources/img/${advert.product.productImages[0].productImgName}"
+										alt="Card image cap">
+								</c:when>
+								<c:otherwise>
+									<img class="card-img-top img-fluid"
+										src="${contextPath}/resources/img/noimage.jpg">
+								</c:otherwise>
+							</c:choose>
+
+
+
+
+							<div class=" card-body d-flex flex-column card-block p-2">
+								<h4 class="card-title">${advert.product.productName}</h4>
+
+								
+
+
+
+								<div style="margin-top: auto;" class="align-self-end w-100">
+									<div class="btn-group mb-1 d-flex" role="group" aria-label="">
+
+										<a class="btn btn-Primary w-100"
+											href="${contextPath}/seller/updateProduct/${advert.advertismentId}">Add
+											to cart</a>
+										<button type="button" class="btn btn-default w-30">
+											<a
+												href="${contextPath}/seller/deleteProduct/${advert.advertismentId}"><i
+												class="fas fa-times"></i></a>
+										</button>
+
+
+									</div>
+
+									<small class="border-top text-muted">last modified:
+										${advert.lastModifiedDate}</small>
 
 								</div>
+
+
 							</div>
-
-
 						</div>
+
 					</div>
 
-				</div>
+				</c:forEach>
 
-			</c:forEach>
-
+			</div>
 		</div>
+
+
+
+		<div class="row">
+			<div class="col-lg-6 offset-lg-3 py-5 d-flex">
+				<ul class="pagination mx-auto">
+					<li class="page-item disabled"><a class="page-link" href="#"
+						aria-label="Previous"> <span aria-hidden="true">«</span> <span
+							class="sr-only">Previous</span>
+					</a></li>
+
+					<c:forEach var="i" begin="1" end="${pageList.totalPageCount+1}">
+						<li class="page-item"><a class="page-link"
+							href="${contextPath}?${productCategory}&page=${i-1}">${i-1}</a></li>
+
+					</c:forEach>
+
+					<li class="page-item"><a class="page-link" href="#"
+						aria-label="Next"> <span aria-hidden="true">»</span> <span
+							class="sr-only">Next</span>
+					</a></li>
+				</ul>
+			</div>
+		</div>
+
+
 
 
 	</div>
+
+	<br>
+	<br>
+	<br>
 
 
 

@@ -1,4 +1,5 @@
 
+<%@page import="com.bo.buycar.model.product.ProductCategory"%>
 <html lang="en">
 <head>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
@@ -36,13 +37,16 @@
 				<form:input path="productName" id="name" class="form-control mb-1" />
 				<form:errors path="productName" cssClass="form-error text-alert" />
 			</div>
-
+			<c:set var="productCategories" value="<%=ProductCategory.values()%>" />
 			<div class="form-group">
 				<label for="name">Product category:</label>
-				<c:forEach var="pCat" items="${productCategories}" >
-					<form:radiobutton cssClass="m-1" path="productCategory" label="${pCat.name}" value="${pCat}"/>
-				</c:forEach>
+				<c:forEach var="pCat" items="${productCategories}">
+					<form:radiobutton cssClass="m-1" path="productCategory"
+						label="${pCat.name}" value="${pCat}" />
+				</c:forEach><br/>
+				<form:errors path="productCategory" cssClass="form-error" />
 			</div>
+			
 
 			<div class="row">
 				<div class="col">

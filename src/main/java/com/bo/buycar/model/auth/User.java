@@ -1,8 +1,10 @@
 package com.bo.buycar.model.auth;
 
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -14,9 +16,15 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
+import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
+import javax.validation.constraints.NotEmpty;
 
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
+import org.hibernate.annotations.Sort;
+import org.hibernate.annotations.SortComparator;
+import org.hibernate.annotations.SortNatural;
 
 import com.bo.buycar.model.Advertisment;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -29,33 +37,48 @@ public class User {
 	int id;
 
 	public User() {
-		
+
 	}
 
 	public User(int id, String username, String password) {
-		
+
 		this.id = id;
 		this.username = username;
 		this.password = password;
 	}
 
+	@Column(unique = true)
+	@NotEmpty(message = "You must enter a username.")
 	String username;
+
+	@NotEmpty(message = "You must enter a password.")
 	String password;
 
-	@ManyToMany(fetch=FetchType.EAGER, cascade=CascadeType.ALL)
+	@NotEmpty(message = "You must enter a email.")
+	@Column(unique = true)
+	String email;
+
+	@NotEmpty(message = "You must enter a country.")
+	String country;
+	@NotEmpty(message = "You must enter a street.")
+	String street;
+	@NotEmpty(message = "You must enter a city.")
+	String city;
+
+	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	@Fetch(value = FetchMode.SUBSELECT)
 	@JoinTable(name = "UserAndRoles", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
 	@JsonIgnore
 	List<Role> roles;
 
-	@OneToMany(fetch=FetchType.EAGER, cascade=CascadeType.ALL, mappedBy="buyer", orphanRemoval=true)
-	@Fetch(value = FetchMode.SUBSELECT)
-	List<Advertisment> advertsSold;
-	
-	@OneToMany(fetch=FetchType.EAGER, cascade=CascadeType.ALL, mappedBy="seller", orphanRemoval=true)
-	@Fetch(value = FetchMode.SUBSELECT)
-	List<Advertisment> advertsBought;
-	
+	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "seller")
+	@SortNatural
+	Set<Advertisment> advertsSold;
+
+	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "buyer")
+	@SortNatural
+	Set<Advertisment> advertsBought;
+
 	@Enumerated(EnumType.STRING)
 	private UserStatus status;
 
@@ -105,19 +128,51 @@ public class User {
 				+ status + "]";
 	}
 
-	public List<Advertisment> getAdvertsSold() {
+	public Set<Advertisment> getAdvertsSold() {
 		return advertsSold;
 	}
 
-	public void setAdvertsSold(List<Advertisment> advertsSold) {
+	public void setAdvertsSold(Set<Advertisment> advertsSold) {
 		this.advertsSold = advertsSold;
 	}
 
-	public List<Advertisment> getAdvertsBought() {
+	public Set<Advertisment> getAdvertsBought() {
 		return advertsBought;
 	}
 
-	public void setAdvertsBought(List<Advertisment> advertsBought) {
+	public void setAdvertsBought(Set<Advertisment> advertsBought) {
 		this.advertsBought = advertsBought;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	public String getCountry() {
+		return country;
+	}
+
+	public void setCountry(String country) {
+		this.country = country;
+	}
+
+	public String getStreet() {
+		return street;
+	}
+
+	public void setStreet(String street) {
+		this.street = street;
+	}
+
+	public String getCity() {
+		return city;
+	}
+
+	public void setCity(String city) {
+		this.city = city;
 	}
 }

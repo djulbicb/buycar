@@ -28,21 +28,19 @@
 
 	<div class="container">
 
-		<form action="/buycar/login" method="POST"
-			class="jumbotron jumbotron-fluid">
+
+
+
+		<form:form method="POST" class="jumbotron jumbotron-fluid"
+			action="/buycar/register" modelAttribute="user">
 
 			<div class="row">
 				<div class="col-8 offset-2">
-					<h3 class="">Enter login:</h3>
 
-					<c:if test="${not empty msg}">
-						<div class="alert alert-dismissible alert-info">
-							<button type="button" class="close" data-dismiss="alert">&times;</button>
-							${msg}
-						</div>
+					<h3>Enter information to register:</h3>
 
-					</c:if>
 
+<form:errors path="username" cssClass="form-error text-alert" />
 					<div class="form-group">
 						<div class="input-group mb-2">
 							<div class="input-group-prepend">
@@ -50,11 +48,14 @@
 									<i class="fa fa-user text-info"></i>
 								</div>
 							</div>
-							<input type="text" class="form-control" id="username"
-								name="username" placeholder="Username" required>
+							<form:input class="form-control" placeholder="Username"
+								id="username" name="username" path="username" />
+							
 						</div>
 					</div>
 
+
+<form:errors path="password" cssClass="form-error text-alert" />
 					<div class="form-group">
 						<div class="input-group mb-2">
 							<div class="input-group-prepend">
@@ -62,35 +63,100 @@
 									<i class="fa fa-key text-info"></i>
 								</div>
 							</div>
-							<input type="text" class="form-control" id="password"
-								name="password" placeholder="Password" required />
+							<form:input class="form-control" placeholder="Password"
+								id="password" name="password" path="password" />
+							
 						</div>
+					</div>
+
+
+
+<form:errors path="email" cssClass="form-error text-alert" />
+					<div class="form-group">
+						<div class="input-group mb-2">
+							<div class="input-group-prepend">
+								<div class="input-group-text">
+									<i class="fas fa-envelope text-info"></i>
+								</div>
+							</div>
+							<form:input class="form-control" placeholder="Email" id="email"
+								name="Email" path="email" />
+							
+						</div>
+						
 					</div>
 
 					<div class="row">
+						<div class="col-6">
+						<form:errors path="country" cssClass="form-error text-alert" />
+							<div class="form-group">
+								<div class="input-group mb-2">
+									<div class="input-group-prepend">
+										<div class="input-group-text">
+											<i class="fas fa-globe text-info"></i>
+										</div>
+									</div>
+									<form:input class="form-control" placeholder="Country" id="country"
+										name="country" path="country" />
+									
+								</div>
+							</div>
+						</div>
+						<div class="col-6">
+						<form:errors path="city" cssClass="form-error text-alert" />
+							<div class="form-group">
+							
+								<div class="input-group mb-2">
+									<div class="input-group-prepend">
+										<div class="input-group-text">
+											<i class="fas fa-archway text-info"></i>
+										</div>
+									</div>
+									<form:input class="form-control" placeholder="City" id="city"
+										name="city" path="city" />
+									
+								</div>
+							</div>
+						</div>
+					</div>
+					
+					
+					<form:errors path="street" cssClass="form-error text-alert" />
+					<div class="form-group">
+						<div class="input-group mb-2">
+							<div class="input-group-prepend">
+								<div class="input-group-text">
+									<i class="fas fa-road text-info"></i>
+								</div>
+							</div>
+							<form:input class="form-control" placeholder="Street" id="street"
+								name="street" path="street" />
+							
+						</div>
+					</div>
+					
+					<div class="row">
 						<div class="col">
-							<input class="btn btn-block btn-info" type="submit" value="Login" />
+							<input class="btn btn-block btn-info" type="submit" value="Register"/>
 						</div>
 						<div class="col">
 							<a class="btn btn-block btn-outline-primary"
-								href="/buycar/logout">Register</a>
+								href="/buycar/login">Login</a>
 						</div>
 					</div>
-
-
-				</div>
-			</div>
-		</form>
-
-
-
-
-
-
+		</form:form>
 	</div>
 
+</body>
 
-	<jsp:include page="../template/footer.jsp" />
+
+
+
+
+</div>
+
+
+<jsp:include page="../template/footer.jsp" />
 <script
 	src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"
 	integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"

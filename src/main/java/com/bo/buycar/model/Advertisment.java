@@ -14,6 +14,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
+import com.bo.buycar.dao.impl.AdvertismentDaoImpl;
 import com.bo.buycar.model.auth.User;
 import com.bo.buycar.model.product.Product;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -21,7 +22,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 
 @Entity
-public class Advertisment {
+public class Advertisment implements Comparable<Advertisment>{
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -106,6 +107,12 @@ public class Advertisment {
 
 	public void setSeller(User seller) {
 		this.seller = seller;
+	}
+
+	@Override
+	public int compareTo(Advertisment o) {
+		
+		return publishDate.compareTo(o.getPublishDate());
 	}
 
 

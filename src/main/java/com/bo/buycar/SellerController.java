@@ -10,6 +10,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -77,7 +78,7 @@ public class SellerController {
 	ProductDao productDao;
 	
 	@PostMapping("/addProduct")
-	public String jebiSe(@Valid @ModelAttribute("product") Product product, BindingResult result, HttpServletRequest request, @AuthenticationPrincipal Principal principal) {
+	public String getAddProduct(@Valid @ModelAttribute("product") Product product, BindingResult result, HttpServletRequest request, @AuthenticationPrincipal Principal principal) {
 		if (result.hasErrors()) {
 			return "seller/addProduct";
 		}
@@ -122,10 +123,11 @@ public class SellerController {
 		advertisment.setActive(true);
 		advertisment.setLastModifiedDate(new Date());
 		advertisment.setPublishDate(new Date());
+		product.setAdvertisment(advertisment);
+		user.getAdvertsSold().add(advertisment);
 		
-		
-		advertismentDao.addAdvertisment(advertisment);			
-				
+		//advertismentDao.addAdvertisment(advertisment);			
+			userDao.updateUser(user);	
 		return "redirect:/seller/view/showAll";
 	}
 
@@ -138,14 +140,18 @@ public class SellerController {
 		System.out.println(username);
 		User user = userDao.getUserByUsername(username);
 		System.out.println(user);
-		List<Advertisment> advertsSold = user.getAdvertsSold();
-		System.out.println(advertsSold);
+
+		Set<Advertisment> advertsBought = user.getAdvertsBought();
+		if (advertsBought!=null) {
+			System.out.println(advertsBought);
+		}
+		Set<Advertisment> advertsSold = user.getAdvertsSold();
+		if (advertsSold!=null) {
+			System.out.println(advertsSold);
+		}
 		
-		// List<Product> products = productDao.getProductAll();
-		//model.addAttribute("products", products);
-		System.out.println(advertsSold);
-		System.out.println(advertsSold.size());
 		model.addAttribute("adverts", advertsSold);
+		
 		return "seller/allProducts";
 	}
 	
@@ -156,17 +162,21 @@ public class SellerController {
 		return "seller/viewProduct";
 	}
 	
-	@GetMapping("/updateProduct/{productId}")
-	public String showUpdateProduct(@PathVariable("productId") int productId, Model model) {
-		Product product = productDao.getProductById(productId);
-		model.addAttribute("product", product);
+	@GetMapping("/updateProduct/{advertismentId}")
+	public String showUpdateProduct(@PathVariable("advertismentId") int advertismentId, Model model) {
+		//Product product = productDao.getProductById(productId);
+		Advertisment advertisment = advertismentDao.getAdvertismentById(advertismentId);
+		model.addAttribute("product", advertisment.getProduct());
+		model.addAttribute("ad", advertisment);
 		return "seller/updateProduct";
 	}
 	
-	@PostMapping("/updateProduct")
-	public String updateProduct(@Valid @ModelAttribute("product") Product product, BindingResult result, HttpServletRequest request, Model model) {
-		System.out.println("POST");
+	@PostMapping("/updateProduct/{advertismentId}")
+	public String updateProduct(@PathVariable("advertismentId") int advertismentId, @Valid @ModelAttribute("product") Product product, BindingResult result, HttpServletRequest request, Model model) {
+		System.out.println("POST UPDATE");
 		System.out.println(product);
+
+		
 		if (result.hasErrors()) {
 			//return "redirect:/seller/updateProduct/" + product.getProductId();
 			Product productById = productDao.getProductById(product.getProductId());
@@ -174,12 +184,12 @@ public class SellerController {
 			return "seller/updateProduct";
 		}
 		
-		
+		System.out.println(product);
 
 		String rootDirectory = request.getSession().getServletContext().getRealPath("/");
 		Path path = Paths.get(rootDirectory + "/resources/img/" + product.getProductId() + ".png");
 		
-		
+		System.out.println(product);
 		if (product.getProductImageFile() != null && product.getProductImageFile().size() > 0) {
 			List<MultipartFile> productImageFile = product.getProductImageFile();
 			
@@ -196,21 +206,23 @@ public class SellerController {
 				}
 			}
 		}
-		
+		System.out.println(product);
 		productDao.updateProduct(product);
+		advertismentDao.updateAdvertismentDate(advertismentId);
 		return "redirect:/seller/view/showAll";
 	}
 	
-	@GetMapping("/deleteProduct/{productId}")
-	public String showDeleteProduct(@PathVariable("productId") int productId, Model model) {
-		Product product = productDao.getProductById(productId);
-		model.addAttribute("product", product);
+	@GetMapping("/deleteProduct/{advertismentId}")
+	public String showDeleteProduct(@PathVariable("advertismentId") int advertismentId, Model model) {
+		Advertisment advertismentById = advertismentDao.getAdvertismentById(advertismentId);
+		model.addAttribute("ad", advertismentById);
 		return "seller/deleteProductCheck"; 
 	}
 	
 	@PostMapping("/deleteProduct/{productId}")
-	public String deleteProduct(@PathVariable("productId") int productId, Model model) {
-		productDao.deleteProduct(productId);
+	public String deleteProduct(@PathVariable("advertismentId") int advertismentId, Model model) {
+		Advertisment advertisment = advertismentDao.getAdvertismentById(advertismentId);
+		advertismentDao.deleteAdvertisment(advertisment);
 		return "redirect:/seller/view/showAll"; 
 	}
 	

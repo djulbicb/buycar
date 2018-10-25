@@ -40,7 +40,6 @@
 							<button type="button" class="close" data-dismiss="alert">&times;</button>
 							${msg}
 						</div>
-
 					</c:if>
 
 					<div class="form-group">
@@ -73,7 +72,7 @@
 						</div>
 						<div class="col">
 							<a class="btn btn-block btn-outline-primary"
-								href="/buycar/logout">Register</a>
+								href="/buycar/register">Register</a>
 						</div>
 					</div>
 

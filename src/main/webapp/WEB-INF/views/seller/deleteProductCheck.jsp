@@ -29,20 +29,33 @@
 				<div class="col-9">
 					<h1>Delete product</h1>
 					<p>
-						Are you sure you want to <strong>delete</strong> product <strong>${product.productName}</strong>
+						Are you sure you want to <strong>delete</strong> product <strong>${ad.product.productName}</strong>
 					</p>
-					<form action="${contextPath}/seller/deleteProduct/${product.productId}" method="post">
-					<input type="submit" class="btn btn-danger p-3" value="Delete product">
-				<a href="${contextPath}/seller/view/showAll" type="button" class="btn btn-info rounded p-3">Cancel</a>	
+					<form
+						action="${contextPath}/seller/deleteProduct/${ad.product.productId}"
+						method="post">
+						<input type="submit" class="btn btn-danger p-3"
+							value="Delete product"> <a
+							href="${contextPath}/seller/view/showAll" type="button"
+							class="btn btn-info rounded p-3">Cancel</a>
 					</form>
-				
-				
+
+
 				</div>
 
 
 				<div class="col-3">
-					<img width="100%"
-						src="${contextPath}/resources/img/${product.productImages[0].productImgName}">
+			
+
+					<c:choose>
+						<c:when test="${not empty ad.product.productImages[0]}">
+<img width="100%" src="${contextPath}/resources/img/${ad.product.productImages[0].productImgName}">
+  </c:when>
+						<c:otherwise>
+ <img width="100%" src="${contextPath}/resources/img/noimage.jpg">
+  </c:otherwise>
+					</c:choose>
+
 				</div>
 			</div>
 

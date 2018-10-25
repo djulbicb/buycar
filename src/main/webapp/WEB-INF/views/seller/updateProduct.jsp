@@ -1,6 +1,7 @@
 
 <html lang="en">
 <head>
+<%@page import="com.bo.buycar.model.product.ProductCategory"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 <%@ page isELIgnored="false"%>
@@ -34,7 +35,7 @@
 		<h1>Update product</h1>
 		<p>Add information about the product</p>
 
-		<form:form action="${contextPath}/seller/updateProduct"
+		<form:form action="${contextPath}/seller/updateProduct/${ad.advertismentId}"
 			modelAttribute="product" enctype="multipart/form-data" method="POST">
 
 			<form:hidden path="productId" id="productId" class="form-control"
@@ -43,6 +44,16 @@
 				<label for="name">Product name:</label>
 				<form:input path="productName" id="name" class="form-control mb-1" />
 				<form:errors path="productName" cssClass="form-error text-alert" />
+			</div>
+
+<c:set var="productCategories" value="<%=ProductCategory.values()%>" />
+			<div class="form-group">
+				<label for="name">Product category:</label>
+				<c:forEach var="pCat" items="${productCategories}">
+					<form:radiobutton cssClass="m-1" path="productCategory"
+						label="${pCat.name}" value="${pCat}" />
+				</c:forEach><br/>
+				<form:errors path="productCategory" cssClass="form-error" />
 			</div>
 
 			<div class="row">

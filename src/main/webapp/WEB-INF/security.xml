@@ -22,6 +22,8 @@
 			<security:intercept-url pattern="/seller/**" access="hasRole('USER')" /> -->
 		<security:intercept-url pattern="/"
 			access="permitAll" />
+			<security:intercept-url pattern="/register"
+			access="permitAll" />
 		<security:intercept-url pattern="/seller/**"
 			access="hasAuthority('USER')" />
 

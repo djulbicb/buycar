@@ -1,8 +1,10 @@
 package com.bo.buycar.dao.impl;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 
+import javax.sound.midi.Soundbank;
 import javax.transaction.Transactional;
 
 import org.hibernate.Session;
@@ -35,8 +37,15 @@ public class ProductDaoImpl implements ProductDao{
 	@Override
 	public Product updateProduct(Product product) {
 		Session session = sessionFactory.getCurrentSession();
-		session.saveOrUpdate(product);
+		System.out.println("----");
+		System.out.println(product);
+		
+		session.update(product);
 		session.flush();
+		System.out.println("----flush");
+		System.out.println(product);
+		
+		
 		return product;
 	}
 

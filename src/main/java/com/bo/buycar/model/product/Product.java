@@ -15,9 +15,12 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Transient;
 import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Pattern;
 
 import org.springframework.web.multipart.MultipartFile;
 
@@ -26,41 +29,42 @@ import com.bo.buycar.model.auth.UserStatus;
 import com.sun.istack.internal.NotNull;
 
 @Entity
-public class Product implements Serializable{
+public class Product implements Serializable {
 
 	public Product() {
 		productImages = new ArrayList<>();
 	}
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	int productId;
 
-	@NotEmpty(message="You must enter a product name.")
+	@NotEmpty(message = "You must enter a product name.")
 	String productName;
 
-	@NotEmpty(message="You must enter a product description.")
+	@NotEmpty(message = "You must enter a product description.")
 	String productDescription;
 
 	@NotNull
 	double productPrice;
-	
+
 	@NotNull
-    @Min(1900)
+	@Min(1900)
 	int productYear;
-	
+
 	@Transient
 	private List<MultipartFile> productImageFile;
 
-	@OneToMany(fetch=FetchType.EAGER, cascade=CascadeType.ALL, mappedBy="product", orphanRemoval=true)
+	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "product", orphanRemoval = true)
 	List<ProductImage> productImages;
 
-	@OneToOne(targetEntity=Advertisment.class, mappedBy="product")
-	@JoinColumn(name="fk_product_advertisment")
+	@OneToOne(targetEntity=Advertisment.class, fetch=FetchType.EAGER, orphanRemoval=true, cascade=CascadeType.ALL)
 	Advertisment advertisment;
-	
-	@Enumerated(EnumType.STRING)
-	private ProductCategory productCategory;
-	
+
+	@NotEmpty(message = "You must enter a product category.")
+	@Pattern(regexp = "^(CAR|TRUCK|MOTORCYCLE|RV|BOAT)$", message = "Invalid category")
+	private String productCategory;
+
 	public int getProductId() {
 		return productId;
 	}
@@ -94,6 +98,15 @@ public class Product implements Serializable{
 	}
 
 	public List<ProductImage> getProductImages() {
+		/*
+		if (productImages.size() == 0) {
+			ProductImage pic = new ProductImage();
+			pic.setProductImgName("noimage.jpg");
+			pic.setProductImgId(0);
+			List<ProductImage> list = new ArrayList<>();
+			list.add(pic);
+			return list;
+		}*/
 		return productImages;
 	}
 
@@ -117,13 +130,6 @@ public class Product implements Serializable{
 		this.productYear = productYear;
 	}
 
-	@Override
-	public String toString() {
-		return "Product [productId=" + productId + ", productName=" + productName + ", productDescription="
-				+ productDescription + ", productPrice=" + productPrice + ", productYear=" + productYear
-				+ ", productImageFile=" + productImageFile + ", productImages=" + productImages + "]";
-	}
-
 	public Advertisment getAdvertisment() {
 		return advertisment;
 	}
@@ -132,11 +138,19 @@ public class Product implements Serializable{
 		this.advertisment = advertisment;
 	}
 
-	public ProductCategory getProductCategory() {
+	public String getProductCategory() {
 		return productCategory;
 	}
 
-	public void setProductCategory(ProductCategory productCategory) {
+	public void setProductCategory(String productCategory) {
 		this.productCategory = productCategory;
+	}
+
+	@Override
+	public String toString() {
+		return "Product [productId=" + productId + ", productName=" + productName + ", productDescription="
+				+ productDescription + ", productPrice=" + productPrice + ", productYear=" + productYear
+				+ ", productImageFile=" + productImageFile + ", productImages=" + productImages + ", advertisment="
+				+ advertisment + ", productCategory=" + productCategory + "]";
 	}
 }

@@ -1,20 +1,35 @@
 package com.bo.buycar.controller;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
+import java.util.ListIterator;
 
 import javax.persistence.Convert;
+import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.bo.buycar.dao.AdvertismentDao;
 import com.bo.buycar.dao.ProductDao;
+import com.bo.buycar.dao.UserDao;
+import com.bo.buycar.dto.PageList;
 import com.bo.buycar.model.Advertisment;
+import com.bo.buycar.model.auth.Role;
+import com.bo.buycar.model.auth.User;
+import com.bo.buycar.model.auth.UserStatus;
 import com.bo.buycar.model.product.Product;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 
 @Controller
 public class IndexController {
@@ -25,20 +40,52 @@ public class IndexController {
 	@Autowired
 	AdvertismentDao advertismentDao;
 	
+	@Autowired 
+	UserDao userDao;
+	
+	
+
+		
+
+	
+	
+	
 	@GetMapping("/")
-	public String getIndex(@RequestParam(required=false, name="productCategory")String productCategory, Model model) {
+	public String getIndex(@RequestParam(required=false, name="productCategory", defaultValue="")String productCategory, @RequestParam(defaultValue="0", name="page") int page, Model model) {
 		List<Advertisment> advertisments = advertismentDao.getAdvertismentAll();
 		
 		
-		model.addAttribute("advertisments", advertisments);
-		System.out.println(advertisments);
+		PageList pageList = advertismentDao.getAdvertismentAll(productCategory,page);
+		model.addAttribute("currentPage",page);
+		
+		System.out.println(pageList);
+		model.addAttribute("advertisments", pageList.getListAdvertisments());
+		model.addAttribute("pageList", pageList);
+		
+		if (!productCategory.equals("")) {
+			productCategory = "productCategory=" + productCategory ;
+		}
+		model.addAttribute("productCategory", productCategory);
+		
 		
 		return "index";
 	}
 	
 	@GetMapping("/register")
-	public String getRegister() {
+	public String getRegister(Model model) {
+		model.addAttribute("user", new User());
 		return "general/register";
+	}
+	
+	@PostMapping("/register")
+	public String postRegister(Model model, @Valid @ModelAttribute("user") User user, BindingResult result) {
+		if (result.hasErrors()) {
+			return "general/register";
+		}
+		
+
+		userDao.addUser(user);
+		return "redirect:/login";
 	}
 	
 	@GetMapping("/login")

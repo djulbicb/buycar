@@ -28,6 +28,11 @@
 
 .no-gutter-card-deck>.card {
 	margin: 1;
+	
+	
+}
+p {
+  text-align: justify;
 }
 </style>
 </head>
@@ -74,34 +79,50 @@
 			<div class="row">
 
 				<c:forEach items="${adverts}" var="advert">
-s
-					<div class="col-sm-4 mb-2 m-0 p-1 d-flex align-items-stretch">
+
+					<div class="col-sm-3 mb-2 m-0 p-1 d-flex align-items-stretch">
 						<div class="card">
-							<img class="card-img-top img-fluid"
-								src="${contextPath}/resources/img/${product.productImages[0].productImgName}"
-								alt="Card image cap">
+
+							<c:choose>
+								<c:when test="${not empty advert.product.productImages[0]}">
+									<img class="card-img-top img-fluid"
+										src="${contextPath}/resources/img/${advert.product.productImages[0].productImgName}"
+										alt="Card image cap">
+								</c:when>
+								<c:otherwise>
+									<img class="card-img-top img-fluid"
+										src="${contextPath}/resources/img/noimage.jpg">
+								</c:otherwise>
+							</c:choose>
+
+
+
+
 							<div class=" card-body d-flex flex-column card-block p-2">
-								<h4 class="card-title">${product.productName}</h4>
-								
-								<p class="card-text">This is a longer card with supporting
-									text below as a natural lead-in to additional content. This
-									content is a little bit longer.</p>
+								<h4 class="card-title mb-1 ">${advert.product.productName}</h4>
+
+								<p class="card-text mb-1 text-justified">${fn:substring(advert.product.productDescription, 0, 70)}...</p>
 
 
 
 								<div style="margin-top: auto;" class="align-self-end w-100">
-									<div class="btn-group d-flex" role="group" aria-label="">
+									<div class="btn-group mb-2 d-flex" role="group" aria-label="">
 
 										<a class="btn btn-Primary w-100"
-											href="${contextPath}/seller/updateProduct/${product.productId}">Edit
+											href="${contextPath}/seller/updateProduct/${advert.advertismentId}">Edit
 											product</a>
 										<button type="button" class="btn btn-default w-30">
 											<a
-												href="${contextPath}/seller/deleteProduct/${product.productId}"><i
+												href="${contextPath}/seller/deleteProduct/${advert.advertismentId}"><i
 												class="fas fa-times"></i></a>
 										</button>
 
+
 									</div>
+
+									<small class="border-top text-muted">last modified:
+										${advert.lastModifiedDate}</small>
+
 								</div>
 
 
