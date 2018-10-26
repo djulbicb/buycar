@@ -15,6 +15,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
@@ -27,6 +28,8 @@ import org.hibernate.annotations.SortComparator;
 import org.hibernate.annotations.SortNatural;
 
 import com.bo.buycar.model.Advertisment;
+import com.bo.buycar.model.card.Card;
+import com.bo.buycar.model.product.Product;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
@@ -79,6 +82,10 @@ public class User {
 	@SortNatural
 	Set<Advertisment> advertsBought;
 
+	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "user", orphanRemoval = true)
+	@Fetch(value = FetchMode.SUBSELECT)
+	List<Card> cards;
+	
 	@Enumerated(EnumType.STRING)
 	private UserStatus status;
 
@@ -174,5 +181,13 @@ public class User {
 
 	public void setCity(String city) {
 		this.city = city;
+	}
+
+	public List<Card> getCards() {
+		return cards;
+	}
+
+	public void setCards(List<Card> cards) {
+		this.cards = cards;
 	}
 }

@@ -16,6 +16,13 @@
 	href="<c:url value='/resources/app/css/sandstone/bootstrap.min.css'/>"
 	rel="stylesheet">
 
+<style type="text/css">
+.card-title{
+font-size:1em;
+text-align: center;
+display: block;}
+</style>
+
 </head>
 <body>
 
@@ -89,11 +96,8 @@
 										<a class="btn btn-Primary w-100"
 											href="${contextPath}/seller/updateProduct/${advert.advertismentId}">Add
 											to cart</a>
-										<button type="button" class="btn btn-default w-30">
-											<a
-												href="${contextPath}/seller/deleteProduct/${advert.advertismentId}"><i
-												class="fas fa-times"></i></a>
-										</button>
+									
+											
 
 
 									</div>
