@@ -1,4 +1,5 @@
 
+
 <html lang="en">
 <head>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
@@ -22,6 +23,11 @@ font-size:1em;
 text-align: center;
 display: block;}
 </style>
+
+<script
+  src="https://code.jquery.com/jquery-3.3.1.min.js"
+  integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+  crossorigin="anonymous"></script>
 
 </head>
 <body>
@@ -93,9 +99,13 @@ display: block;}
 								<div style="margin-top: auto;" class="align-self-end w-100">
 									<div class="btn-group mb-1 d-flex" role="group" aria-label="">
 
-										<a class="btn btn-Primary w-100"
-											href="${contextPath}/seller/updateProduct/${advert.advertismentId}">Add
-											to cart</a>
+
+<button class="btnAddToCart btn btn-block btn-primary" data-advertisment-id="${advert.advertismentId}">Add to cart</button>
+
+
+
+					
+					
 									
 											
 
@@ -155,5 +165,46 @@ display: block;}
 
 	<jsp:include page="template/footer.jsp" />
 
+
+<script type="text/javascript">
+
+$('.btnAddToCart').on('click', function(event){
+
+     var id=$(this).attr('data-advertisment-id');
+     
+     console.log(id);
+
+    
+
+         $.ajax({ 
+             type: "POST",
+             dataType: "json",
+             url: "http://localhost:8080/buycar/rest/cart/add/" + id,
+             success: function(data){        
+                console.log(data);
+                
+             }
+         });
+    	 
+    	
+     
+
+     
+});
+
+function deleteImage(event) {
+	//console.log(event);	
+	
+
+	   
+}
+</script>
+
 </body>
 </html>
+
+
+
+
+
+
