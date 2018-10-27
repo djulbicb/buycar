@@ -2,11 +2,13 @@ package com.bo.buycar.controller;
 
 import java.security.Principal;
 import java.util.Calendar;
+import java.util.List;
 
 import javax.validation.Valid;
 
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,8 +17,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.bo.buycar.model.Order;
 import com.bo.buycar.model.auth.User;
 import com.bo.buycar.model.card.Card;
+import com.bo.buycar.model.cart.CartItem;
 import com.bo.buycar.service.CardService;
 import com.bo.buycar.service.UserService;
 
@@ -37,10 +41,12 @@ public class ProfileController {
 	@GetMapping("/showProfile")
 	public String getShowProfile(Principal principal, Model model) {
 		User user = userService.findUserByUsername(principal.getName());
+		System.out.println(user);
 		model.addAttribute("user", user);
 		System.out.println("---------------");
 		System.out.println(user);
 		System.out.println("---------------");
+		user.getCart().getCartItems();
 		return "profile/showProfile";
 	}
 
@@ -51,6 +57,33 @@ public class ProfileController {
 		card.setMonthExpire(1);
 		model.addAttribute("card", card);
 		return "profile/addCard";
+	}
+	
+	@GetMapping("/showCart")
+	public String getShowCart(Model model,Principal principal) {
+		User user = userService.findUserByUsername(principal.getName());		
+		List<CartItem> cartItems = user.getCart().getCartItems();
+		
+		double total = calcTltCartValue(cartItems);
+		
+		Order order = new Order();
+		
+		model.addAttribute("user", user);
+		model.addAttribute("cartItems", cartItems);
+		model.addAttribute("total", total);
+		model.addAttribute("order", order);
+		
+		
+		
+		return "profile/showCart";
+	}
+
+	private double calcTltCartValue(List<CartItem> cartItems) {
+		double total = 0;
+		for (CartItem cartItem : cartItems) {
+			total += cartItem.getQuontity() * cartItem.getAdvertisment().getProduct().getProductPrice();
+		}
+		return total;
 	}
 
 	@PostMapping("/addCard")

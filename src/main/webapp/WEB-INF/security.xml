@@ -27,7 +27,7 @@
 		<security:intercept-url pattern="/seller/**"
 			access="hasAuthority('USER')" />
 
-		<security:form-login login-page="/login" default-target-url="/index" authentication-failure-url="/login?error"/>
+		<security:form-login login-page="/login" default-target-url="/" authentication-failure-url="/login?error"/>
 		<security:logout logout-success-url="/login?logout" logout-url="/logout"
 			delete-cookies="JSESSIONID"/>
 		<security:csrf disabled="true" />

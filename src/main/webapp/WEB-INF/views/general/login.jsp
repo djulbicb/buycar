@@ -50,7 +50,7 @@
 								</div>
 							</div>
 							<input type="text" class="form-control" id="username"
-								name="username" placeholder="Username" required>
+								name="username" placeholder="Username" required value="admin"/>
 						</div>
 					</div>
 
@@ -62,7 +62,7 @@
 								</div>
 							</div>
 							<input type="text" class="form-control" id="password"
-								name="password" placeholder="Password" required />
+								name="password" placeholder="Password" required value="1234"/>
 						</div>
 					</div>
 

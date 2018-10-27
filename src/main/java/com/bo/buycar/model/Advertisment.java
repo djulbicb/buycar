@@ -1,7 +1,7 @@
 package com.bo.buycar.model;
 
 import java.util.Date;
-
+import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -14,15 +14,20 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+
 import com.bo.buycar.dao.impl.AdvertismentDaoImpl;
 import com.bo.buycar.model.auth.User;
+import com.bo.buycar.model.card.Card;
+import com.bo.buycar.model.cart.CartItem;
 import com.bo.buycar.model.product.Product;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 
 
 @Entity
-public class Advertisment implements Comparable<Advertisment>{
+public class Advertisment{
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -47,6 +52,10 @@ public class Advertisment implements Comparable<Advertisment>{
 
 	Date lastModifiedDate;
 
+	@OneToMany(targetEntity=CartItem.class, fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "advertisment", orphanRemoval = true)
+	@Fetch(value = FetchMode.SUBSELECT)
+	List<CartItem> cartItems;
+	
 	public int getAdvertismentId() {
 		return advertismentId;
 	}
@@ -108,11 +117,19 @@ public class Advertisment implements Comparable<Advertisment>{
 	public void setSeller(User seller) {
 		this.seller = seller;
 	}
-
+/*
 	@Override
 	public int compareTo(Advertisment o) {
 		
 		return publishDate.compareTo(o.getPublishDate());
+	}*/
+
+	public List<CartItem> getCartItems() {
+		return cartItems;
+	}
+
+	public void setCartItems(List<CartItem> cartItems) {
+		this.cartItems = cartItems;
 	}
 
 

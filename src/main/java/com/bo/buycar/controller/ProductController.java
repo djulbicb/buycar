@@ -1,4 +1,4 @@
-package com.bo.buycar;
+package com.bo.buycar.controller;
 
 
 import org.springframework.stereotype.Controller;

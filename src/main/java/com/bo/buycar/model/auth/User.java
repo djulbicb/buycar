@@ -17,6 +17,7 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.NotEmpty;
@@ -29,6 +30,7 @@ import org.hibernate.annotations.SortNatural;
 
 import com.bo.buycar.model.Advertisment;
 import com.bo.buycar.model.card.Card;
+import com.bo.buycar.model.cart.Cart;
 import com.bo.buycar.model.product.Product;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -43,6 +45,9 @@ public class User {
 
 	}
 
+	@OneToOne(targetEntity=Cart.class, fetch=FetchType.EAGER, orphanRemoval=true, cascade=CascadeType.ALL)
+	Cart cart;
+	
 	public User(int id, String username, String password) {
 
 		this.id = id;
@@ -75,11 +80,11 @@ public class User {
 	List<Role> roles;
 
 	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "seller")
-	@SortNatural
+	//@SortNatural
 	Set<Advertisment> advertsSold;
 
 	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "buyer")
-	@SortNatural
+	//@SortNatural
 	Set<Advertisment> advertsBought;
 
 	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "user", orphanRemoval = true)
@@ -129,11 +134,7 @@ public class User {
 		this.status = status;
 	}
 
-	@Override
-	public String toString() {
-		return "User [id=" + id + ", username=" + username + ", password=" + password + ", roles=" + roles + ", status="
-				+ status + "]";
-	}
+
 
 	public Set<Advertisment> getAdvertsSold() {
 		return advertsSold;
@@ -189,5 +190,20 @@ public class User {
 
 	public void setCards(List<Card> cards) {
 		this.cards = cards;
+	}
+
+	public Cart getCart() {
+		return cart;
+	}
+
+	public void setCart(Cart cart) {
+		this.cart = cart;
+	}
+
+	@Override
+	public String toString() {
+		return "User [id=" + id + ", cart=" + cart + ", username=" + username + ", password=" + password + ", email="
+				+ email + ", country=" + country + ", street=" + street + ", city=" + city + ", roles=" + roles
+				+ "]";
 	}
 }
