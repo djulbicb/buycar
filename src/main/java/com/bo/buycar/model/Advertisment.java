@@ -16,11 +16,13 @@ import javax.persistence.OneToOne;
 
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
+import org.hibernate.criterion.Order;
 
 import com.bo.buycar.dao.impl.AdvertismentDaoImpl;
 import com.bo.buycar.model.auth.User;
 import com.bo.buycar.model.card.Card;
 import com.bo.buycar.model.cart.CartItem;
+import com.bo.buycar.model.cart.CartOrder;
 import com.bo.buycar.model.product.Product;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -45,6 +47,12 @@ public class Advertisment{
 	@JoinColumn(name="fk_ad_seller")
 	@JsonIgnore
 	User seller;
+	
+	
+	@ManyToOne(fetch=FetchType.EAGER, cascade = CascadeType.REFRESH, targetEntity=CartOrder.class)
+	@JoinColumn(name="fk_advert_order")
+	@JsonIgnore
+	CartOrder cartOrder;
 	
 	boolean isActive;
 	
@@ -131,6 +139,17 @@ public class Advertisment{
 	public void setCartItems(List<CartItem> cartItems) {
 		this.cartItems = cartItems;
 	}
+
+	public CartOrder getCartOrder() {
+		return cartOrder;
+	}
+
+	public void setCartOrder(CartOrder cartOrder) {
+		this.cartOrder = cartOrder;
+	}
+
+
+
 
 
 }

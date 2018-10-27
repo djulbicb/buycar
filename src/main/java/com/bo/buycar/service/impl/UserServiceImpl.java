@@ -16,6 +16,7 @@ import com.bo.buycar.service.UserService;
 import com.bo.buycar.model.auth.Role;
 import com.bo.buycar.model.auth.User;
 import com.bo.buycar.model.auth.UserStatus;
+import com.bo.buycar.model.cart.Cart;
 
 @Service
 @Transactional
@@ -50,8 +51,19 @@ public class UserServiceImpl implements UserService {
 		user.setStatus(UserStatus.ACTIVE);
 		Role roleByName = roleDao.getRoleByName("USER");
 		
+		List<User> users = new ArrayList<>();
+		users.add(user);
+		
+		roleByName.setUsers(users);
+		
 		List<Role> roles = new ArrayList<>();
 		roles.add(roleByName);
+		user.setRoles(roles);
+			
+		Cart cart = new Cart();
+		
+		user.setCart(cart);
+		cart.setUser(user);
 		
 		user.setRoles(roles);
 		userDao.addUser(user);

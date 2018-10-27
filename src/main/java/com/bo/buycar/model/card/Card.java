@@ -1,5 +1,7 @@
 package com.bo.buycar.model.card;
 
+import java.util.List;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -8,14 +10,20 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Pattern;
 
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 import org.springframework.format.annotation.NumberFormat;
 
+import com.bo.buycar.model.Advertisment;
+
 import com.bo.buycar.model.auth.User;
+import com.bo.buycar.model.cart.CartOrder;
 import com.bo.buycar.model.product.Product;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.sun.istack.internal.NotNull;
@@ -48,6 +56,11 @@ public class Card {
 	@JoinColumn(name="fk_card_user")
 	@JsonIgnore
 	User user;
+	
+	
+	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "card", targetEntity=CartOrder.class)
+	@Fetch(value = FetchMode.SUBSELECT)
+	List<CartOrder> cartOrders;
 
 	public int getCardId() {
 		return cardId;
@@ -105,11 +118,21 @@ public class Card {
 		this.user = user;
 	}
 
+
 	@Override
 	public String toString() {
 		return "Card [cardId=" + cardId + ", cardNumber=" + cardNumber + ", cardType=" + cardType + ", balance="
 				+ balance + ", monthExpire=" + monthExpire + ", yearExpire=" + yearExpire + ", user=" + user + "]";
 	}
+
+	public List<CartOrder> getCartOrders() {
+		return cartOrders;
+	}
+
+	public void setCartOrders(List<CartOrder> cartOrders) {
+		this.cartOrders = cartOrders;
+	}
+
 	
 	
 }

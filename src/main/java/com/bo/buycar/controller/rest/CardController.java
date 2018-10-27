@@ -10,29 +10,20 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.bo.buycar.model.product.ProductImage;
+import com.bo.buycar.service.CardService;
 import com.bo.buycar.service.CartService;
 
 @RestController
-@RequestMapping("/rest/cart")
-public class CartController {
+@RequestMapping("/rest/card")
+public class CardController {
 
 	@Autowired
-	CartService cartService;
+	CardService cardService;
 	
-	@RequestMapping("/add/{advertismentId}")
-	@PostMapping
-	public String addCartItem(@PathVariable("advertismentId") int advertismentId, Principal principal) {
+	@RequestMapping("/getBalance/{cartId}")
+	@GetMapping
+	public String getCurrentBalance(@PathVariable("cartId") int cartId, Principal principal) {
 		System.out.println("POST");
-		cartService.addCartItem(principal.getName(), advertismentId);
-		
-		return "gotovo";
-	}
-	
-	@RequestMapping("/remove/{advertismentId}")
-	@PostMapping
-	public String removeCartItem(@PathVariable("advertismentId") int advertismentId, Principal principal) {
-		System.out.println("POST REMOVE");
-		cartService.removeCartItem(principal.getName(), advertismentId);
 		
 		return "gotovo";
 	}

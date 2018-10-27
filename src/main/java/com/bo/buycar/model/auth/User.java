@@ -29,8 +29,10 @@ import org.hibernate.annotations.SortComparator;
 import org.hibernate.annotations.SortNatural;
 
 import com.bo.buycar.model.Advertisment;
+
 import com.bo.buycar.model.card.Card;
 import com.bo.buycar.model.cart.Cart;
+import com.bo.buycar.model.cart.CartOrder;
 import com.bo.buycar.model.product.Product;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -58,6 +60,12 @@ public class User {
 	@Column(unique = true)
 	@NotEmpty(message = "You must enter a username.")
 	String username;
+	
+	@NotEmpty(message = "You must enter first name.")
+	String firstName;
+	
+	@NotEmpty(message = "You must enter last name.")
+	String lastName;
 
 	@NotEmpty(message = "You must enter a password.")
 	String password;
@@ -90,6 +98,12 @@ public class User {
 	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "user", orphanRemoval = true)
 	@Fetch(value = FetchMode.SUBSELECT)
 	List<Card> cards;
+	
+	
+	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "user", targetEntity=CartOrder.class,orphanRemoval=true)
+	@Fetch(value = FetchMode.SUBSELECT)
+	List<CartOrder> cartOrders;
+	
 	
 	@Enumerated(EnumType.STRING)
 	private UserStatus status;
@@ -206,4 +220,30 @@ public class User {
 				+ email + ", country=" + country + ", street=" + street + ", city=" + city + ", roles=" + roles
 				+ "]";
 	}
+
+	public String getFirstName() {
+		return firstName;
+	}
+
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
+	}
+
+	public String getLastName() {
+		return lastName;
+	}
+
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
+	}
+
+	public List<CartOrder> getCartOrders() {
+		return cartOrders;
+	}
+
+	public void setCartOrders(List<CartOrder> cartOrders) {
+		this.cartOrders = cartOrders;
+	}
+
+
 }

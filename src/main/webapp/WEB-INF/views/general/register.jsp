@@ -39,6 +39,38 @@
 
 					<h3>Enter information to register:</h3>
 
+<form:errors path="firstName" cssClass="form-error text-alert" />
+
+					<div class="form-group">
+						<div class="input-group mb-2">
+							<div class="input-group-prepend">
+								<div class="input-group-text">
+									<i class="fa fa-user text-info"></i>
+								</div>
+							</div>
+							<form:input class="form-control" placeholder="First name"
+								id="firstName" name="firstName" path="firstName" />
+							
+						</div>
+					</div>
+		
+		<form:errors path="lastName" cssClass="form-error text-alert" />
+
+					<div class="form-group">
+						<div class="input-group mb-2">
+							<div class="input-group-prepend">
+								<div class="input-group-text">
+									<i class="fa fa-user text-info"></i>
+								</div>
+							</div>
+							<form:input class="form-control" placeholder="Last name"
+								id="lastName" name="lastName" path="lastName" />
+							
+						</div>
+					</div>			
+					
+
+
 
 <form:errors path="username" cssClass="form-error text-alert" />
 ${usernameError}

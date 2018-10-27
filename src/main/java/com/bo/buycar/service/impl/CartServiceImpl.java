@@ -69,4 +69,10 @@ public class CartServiceImpl implements CartService{
 		
 	}
 
+	@Override
+	public void removeCartItem(String name, int advertismentId) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

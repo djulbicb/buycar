@@ -17,10 +17,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.bo.buycar.model.Order;
 import com.bo.buycar.model.auth.User;
 import com.bo.buycar.model.card.Card;
 import com.bo.buycar.model.cart.CartItem;
+import com.bo.buycar.model.cart.CartOrder;
 import com.bo.buycar.service.CardService;
 import com.bo.buycar.service.UserService;
 
@@ -66,7 +66,7 @@ public class ProfileController {
 		
 		double total = calcTltCartValue(cartItems);
 		
-		Order order = new Order();
+		CartOrder order = new CartOrder();
 		
 		model.addAttribute("user", user);
 		model.addAttribute("cartItems", cartItems);
