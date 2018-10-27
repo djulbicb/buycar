@@ -63,7 +63,7 @@ h2 {
 				href="${contextPath}/profile/addCard">Add Card</a> <a
 				class="btn btn-primary w-100 m-1"
 				href="${contextPath}/profile/showCart">Show Cart</a> <a
-				class="btn btn-info w-100 m-1" href="${contextPath}">View orders</a>
+				class="btn btn-info w-100 m-1" href="${contextPath}/profile/showOrders">View orders</a>
 		</div>
 
 

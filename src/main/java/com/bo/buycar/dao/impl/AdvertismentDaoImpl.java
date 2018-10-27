@@ -19,7 +19,6 @@ import com.bo.buycar.model.Advertisment;
 import com.bo.buycar.model.product.Product;
 
 @Repository
-@Transactional
 public class AdvertismentDaoImpl implements AdvertismentDao{
 
 	@Autowired

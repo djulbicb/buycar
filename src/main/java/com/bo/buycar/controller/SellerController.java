@@ -38,6 +38,8 @@ import com.bo.buycar.model.auth.User;
 import com.bo.buycar.model.product.Product;
 import com.bo.buycar.model.product.ProductCategory;
 import com.bo.buycar.model.product.ProductImage;
+import com.bo.buycar.service.AdvertismentService;
+import com.bo.buycar.service.UserService;
 import com.bo.buycar.service.impl.UserDetailsServiceImpl;
 
 
@@ -53,10 +55,10 @@ public class SellerController {
 	}*/
 	
 	@Autowired
-	AdvertismentDao advertismentDao; 
+	AdvertismentService advertismentService; 
 	
 	@Autowired
-	UserDao userDao;
+	UserService userService;
 	
 	@GetMapping("/addProduct")
 	public String showAddProduct(Model model) {	
@@ -91,7 +93,7 @@ public class SellerController {
 
 		String username = principal.getName();
 		System.out.println(username);
-		User user = userDao.getUserByUsername(username);
+		User user = userService.findUserByUsername(username);
 		
 		
 		
@@ -127,7 +129,7 @@ public class SellerController {
 		user.getAdvertsSold().add(advertisment);
 		
 		//advertismentDao.addAdvertisment(advertisment);			
-			userDao.updateUser(user);	
+			userService.updateUser(user);	
 		return "redirect:/seller/view/showAll";
 	}
 
@@ -138,7 +140,7 @@ public class SellerController {
 		
 		String username = principal.getName();
 		System.out.println(username);
-		User user = userDao.getUserByUsername(username);
+		User user = userService.findUserByUsername(username);
 		System.out.println(user);
 
 		Set<Advertisment> advertsBought = user.getAdvertsBought();
@@ -165,7 +167,7 @@ public class SellerController {
 	@GetMapping("/updateProduct/{advertismentId}")
 	public String showUpdateProduct(@PathVariable("advertismentId") int advertismentId, Model model) {
 		//Product product = productDao.getProductById(productId);
-		Advertisment advertisment = advertismentDao.getAdvertismentById(advertismentId);
+		Advertisment advertisment = advertismentService.getAdvertismentById(advertismentId);
 		model.addAttribute("product", advertisment.getProduct());
 		model.addAttribute("ad", advertisment);
 		return "seller/updateProduct";
@@ -208,21 +210,21 @@ public class SellerController {
 		}
 		System.out.println(product);
 		productDao.updateProduct(product);
-		advertismentDao.updateAdvertismentDate(advertismentId);
+		advertismentService.updateAdvertismentDate(advertismentId);
 		return "redirect:/seller/view/showAll";
 	}
 	
 	@GetMapping("/deleteProduct/{advertismentId}")
 	public String showDeleteProduct(@PathVariable("advertismentId") int advertismentId, Model model) {
-		Advertisment advertismentById = advertismentDao.getAdvertismentById(advertismentId);
+		Advertisment advertismentById = advertismentService.getAdvertismentById(advertismentId);
 		model.addAttribute("ad", advertismentById);
 		return "seller/deleteProductCheck"; 
 	}
 	
 	@PostMapping("/deleteProduct/{productId}")
 	public String deleteProduct(@PathVariable("advertismentId") int advertismentId, Model model) {
-		Advertisment advertisment = advertismentDao.getAdvertismentById(advertismentId);
-		advertismentDao.deleteAdvertisment(advertisment);
+		Advertisment advertisment = advertismentService.getAdvertismentById(advertismentId);
+		advertismentService.deleteAdvertisment(advertisment);
 		return "redirect:/seller/view/showAll"; 
 	}
 	

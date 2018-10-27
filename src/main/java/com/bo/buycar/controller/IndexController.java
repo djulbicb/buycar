@@ -22,6 +22,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.bo.buycar.dao.AdvertismentDao;
 import com.bo.buycar.dao.ProductDao;
 import com.bo.buycar.dao.UserDao;
+import com.bo.buycar.service.AdvertismentService;
+import com.bo.buycar.service.ProductService;
 import com.bo.buycar.service.UserService;
 import com.bo.buycar.dto.PageList;
 import com.bo.buycar.model.Advertisment;
@@ -36,10 +38,10 @@ import org.springframework.data.domain.PageRequest;
 public class IndexController {
 
 	@Autowired
-	ProductDao productDao;
+	ProductService productService;
 	
 	@Autowired
-	AdvertismentDao advertismentDao;
+	AdvertismentService advertismentService;
 		
 	@Autowired
 	UserService userService;	
@@ -47,10 +49,10 @@ public class IndexController {
 	
 	@GetMapping("/")
 	public String getIndex(@RequestParam(required=false, name="productCategory", defaultValue="")String productCategory, @RequestParam(defaultValue="0", name="page") int page, Model model) {
-		List<Advertisment> advertisments = advertismentDao.getAdvertismentAll();
+		List<Advertisment> advertisments = advertismentService.getAdvertismentAll();
 		
 		
-		PageList pageList = advertismentDao.getAdvertismentAll(productCategory,page);
+		PageList pageList = advertismentService.getAdvertismentAll(productCategory,page);
 		model.addAttribute("currentPage",page);
 		
 		System.out.println(pageList);

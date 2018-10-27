@@ -19,7 +19,6 @@ import com.bo.buycar.model.product.Product;
 import com.bo.buycar.model.product.ProductCategory;
 
 @Repository
-@Transactional
 public class ProductDaoImpl implements ProductDao{
 
 	@Autowired

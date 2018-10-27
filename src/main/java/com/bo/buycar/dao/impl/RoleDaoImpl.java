@@ -12,7 +12,6 @@ import com.bo.buycar.dao.RoleDao;
 import com.bo.buycar.model.auth.Role;
 
 @Repository
-@Transactional
 public class RoleDaoImpl implements RoleDao {
 
 	@Autowired

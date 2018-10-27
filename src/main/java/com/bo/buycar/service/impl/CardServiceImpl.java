@@ -14,21 +14,21 @@ import com.bo.buycar.service.UserService;
 
 @Service
 @Transactional
-public class CardServiceImpl implements CardService{
+public class CardServiceImpl implements CardService {
 
 	@Autowired
 	CardDao cardDao;
-	
+
 	@Autowired
 	UserDao userDao;
-	
+
 	@Override
 	public void addCard(String username, Card card) {
 		User user = userDao.getUserByUsername(username);
 		user.getCards().add(card);
 		card.setUser(user);
 		userDao.updateUser(user);
-	
+
 	}
 
 	@Override
@@ -40,7 +40,12 @@ public class CardServiceImpl implements CardService{
 		System.out.println(card);
 		user.getCards().remove(card);
 		userDao.updateUser(user);
-		
+
+	}
+
+	@Override
+	public Card findByCardId(int cardId) {
+		return cardDao.getCardById(cardId);
 	}
 
 }

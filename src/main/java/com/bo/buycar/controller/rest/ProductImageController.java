@@ -11,17 +11,18 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.bo.buycar.dao.ProductImageDao;
 import com.bo.buycar.model.product.ProductImage;
+import com.bo.buycar.service.ProductImageService;
 
 @RequestMapping("/rest/productImage")
 @RestController
 public class ProductImageController {
 	
 	@Autowired
-	ProductImageDao productImageDao;
+	ProductImageService productImageService;
 
 	@DeleteMapping("/delete/{productImageId}")
 	public String deleteImage(@PathVariable("productImageId") int productImageId) {
-		productImageDao.deleteProductImage(productImageId);
+		productImageService.deleteProductImage(productImageId);
 		return "Deleted product image with id:" + productImageId;
 	}
 	
@@ -30,7 +31,7 @@ public class ProductImageController {
 	@GetMapping
 	public ProductImage getImage(@PathVariable("productImageId") int productImageId) {
 		System.out.println(productImageId);
-		ProductImage productImage = productImageDao.getProductImageById(productImageId);
+		ProductImage productImage = productImageService.getProductImageById(productImageId);
 		return productImage;
 	}
 	

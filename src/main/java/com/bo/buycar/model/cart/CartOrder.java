@@ -1,5 +1,6 @@
 package com.bo.buycar.model.cart;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -30,6 +31,8 @@ public class CartOrder{
 	@Transient
 	String cardType;
 
+	double totalValue;
+	
 	@ManyToOne(fetch=FetchType.EAGER,  cascade = CascadeType.REFRESH, targetEntity=User.class)
 	@JoinColumn(name="fk_order_user")
 	@JsonIgnore
@@ -40,10 +43,11 @@ public class CartOrder{
 	@JsonIgnore
 	Card card;
 	
-	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "cartOrder", targetEntity=Advertisment.class)
+	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "cartOrder", targetEntity=CartItem.class)
 	@Fetch(value = FetchMode.SELECT)
-	List<Advertisment> advertisment;
+	List<CartItem> cartItems;
 
+	
 	
 	public int getId() {
 		return id;
@@ -69,13 +73,6 @@ public class CartOrder{
 		this.card = card;
 	}
 
-	public List<Advertisment> getAdvertisment() {
-		return advertisment;
-	}
-
-	public void setAdvertisment(List<Advertisment> advertisment) {
-		this.advertisment = advertisment;
-	}
 
 	public String getCardType() {
 		return cardType;
@@ -84,6 +81,30 @@ public class CartOrder{
 	public void setCardType(String cardType) {
 		this.cardType = cardType;
 	}
+
+	public List<CartItem> getCartItems() {
+		return cartItems;
+	}
+
+	public void setCartItems(List<CartItem> cartItems) {
+		this.cartItems = cartItems;
+	}
+
+	public double getTotalValue() {
+		return totalValue;
+	}
+
+	public void setTotalValue(double totalValue) {
+		this.totalValue = totalValue;
+	}
+
+	@Override
+	public String toString() {
+		return "CartOrder [id=" + id + ", cardType=" + cardType + ", totalValue=" + totalValue + ", user=" + user
+				+ ", card=" + card + ", cartItems=" + cartItems + "]";
+	}
+
+
 	
 
 

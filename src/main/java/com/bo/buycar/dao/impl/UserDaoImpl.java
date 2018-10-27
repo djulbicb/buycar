@@ -19,7 +19,6 @@ import com.bo.buycar.model.auth.UserStatus;
 import com.bo.buycar.model.product.Product;
 
 @Repository
-@Transactional
 public class UserDaoImpl implements UserDao {
 
 	@Autowired

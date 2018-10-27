@@ -32,6 +32,11 @@ public class CartItem {
 	@JoinColumn(name="fk_citem_advert")
 	@JsonIgnore
 	Advertisment advertisment;
+	
+	@ManyToOne(fetch=FetchType.EAGER, cascade = CascadeType.REFRESH, targetEntity=CartOrder.class)
+	@JoinColumn(name="fk_advert_order")
+	@JsonIgnore
+	CartOrder cartOrder;
 
 	public int getCartItemId() {
 		return cartItemId;
@@ -68,5 +73,13 @@ public class CartItem {
 	@Override
 	public String toString() {
 		return "CartItem [cartItemId=" + cartItemId + ", quontity=" + quontity +"]";
+	}
+
+	public CartOrder getCartOrder() {
+		return cartOrder;
+	}
+
+	public void setCartOrder(CartOrder cartOrder) {
+		this.cartOrder = cartOrder;
 	}
 }

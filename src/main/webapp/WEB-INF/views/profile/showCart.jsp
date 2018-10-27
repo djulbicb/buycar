@@ -98,7 +98,7 @@ table {
 								value="Place order" />
 						</div>
 						<div class="col">
-							<a class="btn btn-block btn-outline-primary" href="/buycar/login">Cancel</a>
+							<a class="btn btn-block btn-outline-primary" href="/buycar/profile/showProfile">Cancel</a>
 						</div>
 					</div>
 				</div>

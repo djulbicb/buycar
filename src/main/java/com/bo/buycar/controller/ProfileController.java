@@ -15,13 +15,16 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.bo.buycar.model.auth.User;
 import com.bo.buycar.model.card.Card;
 import com.bo.buycar.model.cart.CartItem;
 import com.bo.buycar.model.cart.CartOrder;
 import com.bo.buycar.service.CardService;
+import com.bo.buycar.service.CartOrderService;
 import com.bo.buycar.service.UserService;
 
 /**
@@ -38,6 +41,9 @@ public class ProfileController {
 	@Autowired
 	CardService cardService;
 
+	@Autowired
+	CartOrderService cartOrderService;
+	
 	@GetMapping("/showProfile")
 	public String getShowProfile(Principal principal, Model model) {
 		User user = userService.findUserByUsername(principal.getName());
@@ -99,4 +105,17 @@ public class ProfileController {
 		cardService.deleteCard(cardId,principal.getName());
 		return "redirect:/profile/showProfile";
 	}
+	
+	@PostMapping("/placeOrder")
+	public void postPlaceOrder(@RequestParam(name="cardType", required=true) int cardId, Model model, Principal principal) {
+		cartOrderService.addOrder(cardId, principal.getName());
+	}
+	
+	@GetMapping("/showOrders")
+	public String getShowOrders(Model model) {
+		List<CartOrder> listCartOrders = cartOrderService.getAllOrders();
+		model.addAttribute("orders", listCartOrders );
+		return "profile/showOrders";
+	}
+	
 }

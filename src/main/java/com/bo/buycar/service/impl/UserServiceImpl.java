@@ -13,10 +13,12 @@ import org.springframework.stereotype.Service;
 import com.bo.buycar.dao.RoleDao;
 import com.bo.buycar.dao.UserDao;
 import com.bo.buycar.service.UserService;
+import com.sun.tools.internal.xjc.reader.xmlschema.bindinfo.BIConversion.UserAdapter;
 import com.bo.buycar.model.auth.Role;
 import com.bo.buycar.model.auth.User;
 import com.bo.buycar.model.auth.UserStatus;
 import com.bo.buycar.model.cart.Cart;
+import com.bo.buycar.model.cart.CartOrder;
 
 @Service
 @Transactional
@@ -66,6 +68,10 @@ public class UserServiceImpl implements UserService {
 		cart.setUser(user);
 		
 		user.setRoles(roles);
+		
+		List<CartOrder> cartOrders = new ArrayList<>();
+		user.setCartOrders(cartOrders);
+		
 		userDao.addUser(user);
 		
 	}
@@ -74,6 +80,14 @@ public class UserServiceImpl implements UserService {
 	public User findUserByUsername(String username) {
 		User user = userDao.getUserByUsername(username);
 		return user;
+	}
+
+
+
+	@Override
+	public void updateUser(User user) {
+		userDao.updateUser(user);
+		
 		
 	}
 

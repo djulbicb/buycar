@@ -49,10 +49,7 @@ public class Advertisment{
 	User seller;
 	
 	
-	@ManyToOne(fetch=FetchType.EAGER, cascade = CascadeType.REFRESH, targetEntity=CartOrder.class)
-	@JoinColumn(name="fk_advert_order")
-	@JsonIgnore
-	CartOrder cartOrder;
+
 	
 	boolean isActive;
 	
@@ -140,13 +137,7 @@ public class Advertisment{
 		this.cartItems = cartItems;
 	}
 
-	public CartOrder getCartOrder() {
-		return cartOrder;
-	}
 
-	public void setCartOrder(CartOrder cartOrder) {
-		this.cartOrder = cartOrder;
-	}
 
 
 

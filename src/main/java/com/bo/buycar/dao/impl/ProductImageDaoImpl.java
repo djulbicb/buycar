@@ -15,7 +15,6 @@ import com.bo.buycar.model.product.Product;
 import com.bo.buycar.model.product.ProductImage;
 
 @Repository
-@Transactional
 public class ProductImageDaoImpl implements ProductImageDao{
 
 	@Autowired
