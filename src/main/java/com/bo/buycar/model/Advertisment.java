@@ -48,9 +48,6 @@ public class Advertisment{
 	@JsonIgnore
 	User seller;
 	
-	
-
-	
 	boolean isActive;
 	
 	Date publishDate;

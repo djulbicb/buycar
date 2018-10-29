@@ -11,6 +11,7 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -39,85 +40,132 @@ import com.bo.buycar.model.product.Product;
 import com.bo.buycar.model.product.ProductCategory;
 import com.bo.buycar.model.product.ProductImage;
 import com.bo.buycar.service.AdvertismentService;
+import com.bo.buycar.service.ProductService;
 import com.bo.buycar.service.UserService;
 import com.bo.buycar.service.impl.UserDetailsServiceImpl;
-
 
 @Controller
 @RequestMapping("/seller")
 public class SellerController {
 
 	/*
-	@ExceptionHandler(Exception.class)
-	public String showError(Exception e)
-	{
-		return e.getMessage();
-	}*/
-	
+	 * @ExceptionHandler(Exception.class) public String showError(Exception e) {
+	 * return e.getMessage(); }
+	 */
+
 	@Autowired
-	AdvertismentService advertismentService; 
-	
+	AdvertismentService advertismentService;
+
 	@Autowired
 	UserService userService;
-	
+
+	@Autowired
+	ProductService productService;
+
+	@Autowired
+	private HttpServletRequest request;
+
+	// Shows form for adding products
 	@GetMapping("/addProduct")
-	public String showAddProduct(Model model) {	
+	public String getAddProduct(Model model) {
+
+		// Create default Product model that is going to be used as model attribute in
+		// the form
 		Product product = new Product();
-		
 		ProductCategory[] productCategories = ProductCategory.values();
-		
-		Calendar cal= Calendar.getInstance();
+
+		Calendar cal = Calendar.getInstance();
 		DateFormat sdf = new SimpleDateFormat("yyyy");
 		int year = Integer.parseInt(sdf.format(cal.getTime()));
-		
+
 		product.setProductYear(year);
+
+		// Add data into model to be used in the form
 		model.addAttribute("product", product);
 		model.addAttribute("productCategories", productCategories);
+
+		// return jsp page
 		return "seller/addProduct";
 	}
-	
-	@Autowired
-	ProductDao productDao;
-	
+
+	// Show one single product
+	// TODO - change it to be avaiable to all
+	@GetMapping("/view/{productId}")
+	public String showProduct(@PathVariable("productId") int productId, Model model) {
+		Product product = productService.getProductById(productId);
+		model.addAttribute("product", product);
+		return "seller/viewProduct";
+	}
+
+	// Show all advertisments that user has created
+	@GetMapping("/view/showAll")
+	public String getAllProducts(Model model, @AuthenticationPrincipal Principal principal) {
+
+		// Retrives user from the database
+		String username = principal.getName();
+		User user = userService.findUserByUsername(username);
+
+		// Get All advertisments that user has bought
+		Set<Advertisment> advertsBought = user.getAdvertsBought();
+		if (advertsBought != null) {
+			System.out.println(advertsBought);
+		}
+
+		// Get All advertisments that user has added to the shop
+		Set<Advertisment> advertsSold = user.getAdvertsSold();
+		if (advertsSold != null) {
+			System.out.println(advertsSold);
+		}
+
+		// Add items user has added to store into model
+		model.addAttribute("adverts", advertsSold);
+
+		// return jsp view to show all items user has added to the store
+		return "seller/allProducts";
+	}
+
+	// Adding product and its advertisment into database
 	@PostMapping("/addProduct")
-	public String getAddProduct(@Valid @ModelAttribute("product") Product product, BindingResult result, HttpServletRequest request, @AuthenticationPrincipal Principal principal) {
+	public String getAddProduct(@Valid @ModelAttribute("product") Product product, BindingResult result,
+			@AuthenticationPrincipal Principal principal) {
+		// Check if any validation error in the request. Returns to add product jsp page
+		// if there are errors
 		if (result.hasErrors()) {
 			return "seller/addProduct";
 		}
-		
-		System.out.println("POST");
-		
+
+		// Retrives path of the server. Used for saving images
 		String rootDirectory = request.getSession().getServletContext().getRealPath("/");
 		Path path = Paths.get(rootDirectory + "/resources/img/" + product.getProductId() + ".png");
-		
 
+		// Retrives username of the user who initiated the request and find user entity
 		String username = principal.getName();
-		System.out.println(username);
 		User user = userService.findUserByUsername(username);
-		
-		
-		
-		System.out.println(product);
-		
-		
-		
+
+		// Check for image files that are uploaded. Save the images to server folder
+		// if set to local path will look something like this
+		// C:\Users\Bojan\eclipse-ee-workspace\.metadata\.plugins\org.eclipse.wst.server.core\tmp0\wtpwebapps\buycar\resources\img
+
 		if (product.getProductImageFile() != null && product.getProductImageFile().size() > 0) {
 			List<MultipartFile> productImageFile = product.getProductImageFile();
-			
+
 			for (MultipartFile file : productImageFile) {
-				path = Paths.get(rootDirectory + "/resources/img/" + file.getOriginalFilename());
+				String dbProductImageName = UUID.randomUUID().toString() + ".jpg";
+
+				path = Paths.get(rootDirectory + "/resources/img/" + dbProductImageName); // file.getOriginalFilename()
 				try {
 					file.transferTo(new File(path.toString()));
 					ProductImage img = new ProductImage();
-					img.setProductImgName(file.getOriginalFilename());
+					img.setProductImgName(dbProductImageName);
 					img.setProduct(product);
-					product.getProductImages().add(img );
+					product.getProductImages().add(img);
 				} catch (Exception e) {
 					throw new RuntimeException("Product image serving failed", e);
 				}
 			}
 		}
-		
+
+		// Create a advertisment with specified product
 		Advertisment advertisment = new Advertisment();
 		advertisment.setProduct(product);
 		product.setAdvertisment(advertisment);
@@ -127,106 +175,100 @@ public class SellerController {
 		advertisment.setPublishDate(new Date());
 		product.setAdvertisment(advertisment);
 		user.getAdvertsSold().add(advertisment);
-		
-		//advertismentDao.addAdvertisment(advertisment);			
-			userService.updateUser(user);	
+
+		// Save advertisment by updating user
+		userService.updateUser(user);
+
+		// show all products that belong to logged in user after saving
 		return "redirect:/seller/view/showAll";
 	}
 
-	
-	@GetMapping("/view/showAll")
-	public String showAllProducts(Model model, @AuthenticationPrincipal Principal principal) {
-		// List<Product> products = productDao.getProductAll();
-		
-		String username = principal.getName();
-		System.out.println(username);
-		User user = userService.findUserByUsername(username);
-		System.out.println(user);
-
-		Set<Advertisment> advertsBought = user.getAdvertsBought();
-		if (advertsBought!=null) {
-			System.out.println(advertsBought);
-		}
-		Set<Advertisment> advertsSold = user.getAdvertsSold();
-		if (advertsSold!=null) {
-			System.out.println(advertsSold);
-		}
-		
-		model.addAttribute("adverts", advertsSold);
-		
-		return "seller/allProducts";
-	}
-	
-	@GetMapping("/view/{productId}")
-	public String showProduct(@PathVariable("productId") int productId, Model model) {
-		Product product = productDao.getProductById(productId);
-		model.addAttribute("product", product);
-		return "seller/viewProduct";
-	}
-	
 	@GetMapping("/updateProduct/{advertismentId}")
-	public String showUpdateProduct(@PathVariable("advertismentId") int advertismentId, Model model) {
-		//Product product = productDao.getProductById(productId);
+	public String getUpdateProduct(@PathVariable("advertismentId") int advertismentId, Model model) {
+		// Product product = productDao.getProductById(productId);
 		Advertisment advertisment = advertismentService.getAdvertismentById(advertismentId);
 		model.addAttribute("product", advertisment.getProduct());
 		model.addAttribute("ad", advertisment);
 		return "seller/updateProduct";
 	}
-	
-	@PostMapping("/updateProduct/{advertismentId}")
-	public String updateProduct(@PathVariable("advertismentId") int advertismentId, @Valid @ModelAttribute("product") Product product, BindingResult result, HttpServletRequest request, Model model) {
-		System.out.println("POST UPDATE");
-		System.out.println(product);
 
-		
+	// Shows form for adding products
+	@PostMapping("/updateProduct/{advertismentId}")
+	public String postUpdateProduct(@PathVariable("advertismentId") int advertismentId, @Valid @ModelAttribute("product") Product product, BindingResult result,
+			@AuthenticationPrincipal Principal principal) {
+		// Check if any validation error in the request. Returns to add product jsp page
+		// if there are errors
+		System.out.println(product);
 		if (result.hasErrors()) {
-			//return "redirect:/seller/updateProduct/" + product.getProductId();
-			Product productById = productDao.getProductById(product.getProductId());
+			// return "redirect:/seller/updateProduct/" + product.getProductId();
+			Product productById = productService.getProductById(product.getProductId());
 			product.setProductImages(productById.getProductImages());
 			return "seller/updateProduct";
 		}
-		
-		System.out.println(product);
-
+		System.out.println("Stigao ovde");
+		// Retrives path of the server. Used for saving images
 		String rootDirectory = request.getSession().getServletContext().getRealPath("/");
-		Path path = Paths.get(rootDirectory + "/resources/img/" + product.getProductId() + ".png");
+
+		// Retrives username of the user who initiated the request and find user entity
+		String username = principal.getName();
+		User user = userService.findUserByUsername(username);
+		System.out.println(user);
 		
-		System.out.println(product);
+		
+		Advertisment advertismentById = advertismentService.getAdvertismentById(advertismentId);
+		Product productDb = advertismentById.getProduct();
+		productDb.setProductCategory(product.getProductCategory());
+		productDb.setProductDescription(product.getProductDescription());
+		productDb.setProductName(product.getProductName());
+		productDb.setProductPrice(product.getProductPrice());
+		productDb.setProductYear(product.getProductYear());
+		
+		
+		System.out.println("Stigao ovde pre cuvanja slika");
+		// Check for image files that are uploaded. Save the images to server folder
+		// if set to local path will look something like this
+		// C:\Users\Bojan\eclipse-ee-workspace\.metadata\.plugins\org.eclipse.wst.server.core\tmp0\wtpwebapps\buycar\resources\img
+
 		if (product.getProductImageFile() != null && product.getProductImageFile().size() > 0) {
 			List<MultipartFile> productImageFile = product.getProductImageFile();
-			
+
 			for (MultipartFile file : productImageFile) {
-				try {
-					path = Paths.get(rootDirectory + "/resources/img/" + file.getOriginalFilename());
-					file.transferTo(new File(path.toString()));
-					ProductImage img = new ProductImage();
-					img.setProductImgName(file.getOriginalFilename());
-					img.setProduct(product);
-					product.getProductImages().add(img );
-				} catch (Exception e) {
-					//throw new RuntimeException("Product image serving failed", e);
+				if (file.getOriginalFilename().trim().length() > 0) {
+					String dbProductImageName = UUID.randomUUID().toString() + ".jpg";
+					System.out.println("------------- " + file.getOriginalFilename());
+					Path path = Paths.get(rootDirectory + "/resources/img/" + dbProductImageName); // file.getOriginalFilename()
+					try {
+						file.transferTo(new File(path.toString()));
+						ProductImage img = new ProductImage();
+						img.setProductImgName(dbProductImageName);
+						img.setProduct(product);
+						productDb.getProductImages().add(img);
+					} catch (Exception e) {
+						throw new RuntimeException("Product image serving failed", e);
+					}
 				}
 			}
 		}
-		System.out.println(product);
-		productDao.updateProduct(product);
-		advertismentService.updateAdvertismentDate(advertismentId);
+		System.out.println("Stigao ovde posle cuvanja slika");
+
+		productService.updateProduct(productDb);
+		
 		return "redirect:/seller/view/showAll";
 	}
-	
+
+	// Show page for checking deletion of the advertisment
 	@GetMapping("/deleteProduct/{advertismentId}")
-	public String showDeleteProduct(@PathVariable("advertismentId") int advertismentId, Model model) {
+	public String getDeleteProduct(@PathVariable("advertismentId") int advertismentId, Model model) {
 		Advertisment advertismentById = advertismentService.getAdvertismentById(advertismentId);
 		model.addAttribute("ad", advertismentById);
-		return "seller/deleteProductCheck"; 
+		return "seller/deleteProductCheck";
 	}
-	
-	@PostMapping("/deleteProduct/{productId}")
-	public String deleteProduct(@PathVariable("advertismentId") int advertismentId, Model model) {
+
+	@PostMapping("/deleteProduct/{advertismentId}")
+	public String postDeleteProduct(@PathVariable("advertismentId") int advertismentId, Model model) {
 		Advertisment advertisment = advertismentService.getAdvertismentById(advertismentId);
 		advertismentService.deleteAdvertisment(advertisment);
-		return "redirect:/seller/view/showAll"; 
+		return "redirect:/seller/view/showAll";
 	}
-	
-}
 
+}

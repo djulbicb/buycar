@@ -4,7 +4,7 @@ import com.bo.buycar.model.product.ProductImage;
 
 public interface ProductImageService {
 
-	void deleteProductImage(int productImageId);
+	String deleteProductImage(String username, int productImageId);
 
 	ProductImage getProductImageById(int productImageId);
 

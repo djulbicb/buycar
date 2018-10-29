@@ -104,7 +104,7 @@
 
 			<div class="form-group">
 				<label for="productImageFile">Upload product images</label><br>
-				<form:input id="productImageFile" path="productImageFile"
+				<form:input id="productImageFile" path="productImageFile" accept=".jpg"
 					type="file" class="btn btn-primary" multiple="true"></form:input>
 				<hr>
 				<input type="submit" value="submit"

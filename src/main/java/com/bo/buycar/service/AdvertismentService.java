@@ -10,7 +10,6 @@ import com.bo.buycar.model.auth.User;
 
 
 public interface AdvertismentService {
-	List<Advertisment> getAdvertismentByUser(User u);
 
 	Advertisment getAdvertismentById(int advertismentId);
 
