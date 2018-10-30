@@ -22,10 +22,10 @@ public class CardController {
 	
 	@RequestMapping("/getBalance/{cartId}")
 	@GetMapping
-	public String getCurrentBalance(@PathVariable("cartId") int cartId, Principal principal) {
+	public double getCurrentBalance(@PathVariable("cartId") int cardId, Principal principal) {
 		System.out.println("POST");
-		
-		return "gotovo";
+		double balance = cardService.getBalance(cardId);
+		return balance;
 	}
 	
 }

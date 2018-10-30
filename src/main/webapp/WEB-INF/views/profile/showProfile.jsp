@@ -58,7 +58,7 @@ h2 {
 
 		<div class="btn-group mb-1 d-flex" role="group" aria-label="">
 			<a class="btn btn-primary w-100 m-1"
-				href="${contextPath}/?productCategory=${pCat}">Sell products</a> <a
+				href="${contextPath}/seller/view/showAll">Sell products</a> <a
 				class="btn btn-primary w-100 m-1"
 				href="${contextPath}/profile/addCard">Add Card</a> <a
 				class="btn btn-primary w-100 m-1"

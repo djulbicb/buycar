@@ -9,5 +9,7 @@ public interface CardService {
 	void deleteCard(int cardId, String name);
 
 	Card findByCardId(int cardId);
+
+	double getBalance(int cardId);
 	
 }

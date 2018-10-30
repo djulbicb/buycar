@@ -10,6 +10,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Random;
 import java.util.Set;
 import java.util.UUID;
 
@@ -71,7 +72,15 @@ public class SellerController {
 
 		// Create default Product model that is going to be used as model attribute in
 		// the form
+		Random random = new Random();
 		Product product = new Product();
+		product.setProductName("Item " + random.nextInt(100));
+		product.setProductDescription("Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic");
+		product.setProductCategory("CAR");
+		int price = (int)(random.nextDouble()*10000);
+		System.out.println(price);
+		product.setProductPrice(price / 100d);
+		
 		ProductCategory[] productCategories = ProductCategory.values();
 
 		Calendar cal = Calendar.getInstance();

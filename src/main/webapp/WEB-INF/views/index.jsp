@@ -18,16 +18,16 @@
 	rel="stylesheet">
 
 <style type="text/css">
-.card-title{
-font-size:1em;
-text-align: center;
-display: block;}
+.card-title {
+	font-size: 1em;
+	text-align: center;
+	display: block;
+}
 </style>
 
-<script
-  src="https://code.jquery.com/jquery-3.3.1.min.js"
-  integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
-  crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"
+	integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+	crossorigin="anonymous"></script>
 
 </head>
 <body>
@@ -48,12 +48,11 @@ display: block;}
 		<c:set var="productCategories" value="<%=ProductCategory.values()%>" />
 
 		<div class="btn-group mb-1 d-flex" role="group" aria-label="">
-<c:forEach var="pCat" items="${productCategories}">
+			<c:forEach var="pCat" items="${productCategories}">
 				<a class="btn btn-primary w-100 m-1"
-				href="${contextPath}/?productCategory=${pCat}">${pCat}</a>
+					href="${contextPath}/?productCategory=${pCat}">${pCat}</a>
 			</c:forEach>
-			<a class="btn btn-info w-100 m-1"
-				href="${contextPath}">Reset</a>
+			<a class="btn btn-info w-100 m-1" href="${contextPath}">Reset</a>
 			</button>
 
 
@@ -92,7 +91,7 @@ display: block;}
 							<div class=" card-body d-flex flex-column card-block p-2">
 								<h4 class="card-title">${advert.product.productName}</h4>
 
-								
+
 
 
 
@@ -100,14 +99,16 @@ display: block;}
 									<div class="btn-group mb-1 d-flex" role="group" aria-label="">
 
 
-<button class="btnAddToCart btn btn-block btn-primary" data-advertisment-id="${advert.advertismentId}">Add to cart</button>
+										<button class="btnAddToCart btn btn-block btn-primary"
+											data-advertisment-id="${advert.advertismentId}">Add
+											to cart</button>
 
 
 
-					
-					
-									
-											
+
+
+
+
 
 
 									</div>
@@ -166,39 +167,34 @@ display: block;}
 	<jsp:include page="template/footer.jsp" />
 
 
-<script type="text/javascript">
+	<script type="text/javascript">
+		var btnClicked;
+		$('.btnAddToCart').on('click', function(event) {
 
-$('.btnAddToCart').on('click', function(event){
+			var id = $(this).attr('data-advertisment-id');
+			btnClicked = $(this);
+			var retMsg = null;
 
-     var id=$(this).attr('data-advertisment-id');
-     
-     console.log(id);
+			$.ajax({
+				type : "POST",
+				dataType : "json",
+				url : "http://localhost:8080/buycar/rest/cart/add/" + id,
+				dataType : "text",
+				success : function(data) {
+					var msg = data;
+					console.log(msg);
+					ajaxCallBack(msg);
+				}
+			});
 
-    
+		});
 
-         $.ajax({ 
-             type: "POST",
-             dataType: "json",
-             url: "http://localhost:8080/buycar/rest/cart/add/" + id,
-             success: function(data){        
-                console.log(data);
-                
-             }
-         });
-    	 
-    	
-     
-
-     
-});
-
-function deleteImage(event) {
-	//console.log(event);	
-	
-
-	   
-}
-</script>
+		function ajaxCallBack(retString) {
+			console.log(retString);
+			console.log(btnClicked);
+			btnClicked.text(retString);
+		}
+	</script>
 
 </body>
 </html>

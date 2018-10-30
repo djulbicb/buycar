@@ -49,7 +49,7 @@ public class IndexController {
 	
 	@GetMapping("/")
 	public String getIndex(@RequestParam(required=false, name="productCategory", defaultValue="")String productCategory, @RequestParam(defaultValue="0", name="page") int page, Model model) {
-		List<Advertisment> advertisments = advertismentService.getAdvertismentAll();
+		//List<Advertisment> advertisments = advertismentService.getAdvertismentAll();
 		
 		
 		PageList pageList = advertismentService.getAdvertismentAll(productCategory,page);

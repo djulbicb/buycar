@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -22,6 +23,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Pattern;
 
+import org.hibernate.validator.constraints.Length;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.bo.buycar.model.Advertisment;
@@ -43,6 +45,8 @@ public class Product implements Serializable {
 	String productName;
 
 	@NotEmpty(message = "You must enter a product description.")
+	@Length(max=2048, message="Description cant be longer than 2048 characters")
+	@Column(length=2048)
 	String productDescription;
 
 	@NotNull

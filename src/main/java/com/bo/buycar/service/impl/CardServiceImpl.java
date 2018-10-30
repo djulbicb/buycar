@@ -48,4 +48,11 @@ public class CardServiceImpl implements CardService {
 		return cardDao.getCardById(cardId);
 	}
 
+	@Override
+	public double getBalance(int cardId) {
+		Card card = cardDao.getCardById(cardId);
+		double balance = card.getBalance();
+		return balance;
+	}
+
 }

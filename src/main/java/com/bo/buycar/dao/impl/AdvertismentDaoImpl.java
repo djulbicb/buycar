@@ -88,10 +88,10 @@ public class AdvertismentDaoImpl implements AdvertismentDao{
 		String queryStr = "";
 		Query query = null;
 		if (productCategory.equals("")) {
-			queryStr = "from Advertisment";
-			query = session.createQuery(queryStr );
+			queryStr = "from Advertisment ad where ad.isActive=true";
+			query = session.createQuery(queryStr);
 		}else {
-			queryStr = "from Advertisment ad where ad.product.productCategory =:productCategory";
+			queryStr = "from Advertisment ad where ad.product.productCategory =:productCategory and ad.isActive=true";
 			query = session.createQuery(queryStr );
 			query.setParameter("productCategory",productCategory);
 		}
