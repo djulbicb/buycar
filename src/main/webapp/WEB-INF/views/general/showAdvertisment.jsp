@@ -3,6 +3,8 @@
 <head>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
+
 <%@ page isELIgnored="false"%>
 <c:set var="contextPath" value="${pageContext.request.contextPath}" />
 
@@ -25,7 +27,9 @@
 .productPrice{
 font-weight: bold;
 }
-
+.text-green{
+color: green;
+}
 </style>
 
 </head>
@@ -37,7 +41,7 @@ font-weight: bold;
 		<!-- justify-content-center -->
 		<div class="row"> 
 
-			<div class="col-8 mb-3 offset-2">
+			<div class="col-10 mb-3 offset-1">
 				<div id="carouselExampleIndicators" class="carousel slide"
 					data-ride="carousel">
 					<ol class="carousel-indicators">
@@ -76,13 +80,40 @@ font-weight: bold;
 
 <div class="card border-primary mb-3">
   <div class="card-header p-2 pl-4 m-0">
-  Price: <span class="productPrice">${advertisment.product.productPrice}$</span> | ${advertisment.product.productCategory}
+  
+  <div class="row m-0 p-0 text-center align-middle">
+  <div class="col m-0 align-middle pt-2">
+  
+  Price: <span class=" productPrice text-green">${advertisment.product.productPrice}$</span>
+  
+   
+  </div>
+  
+  <div class="col m-0">
+  <button class="btnAddToCart btn btn-block btn-outline-primary"
+											data-advertisment-id="${advertisment.advertismentId}">Add
+											to cart</button>
+  </div>
+  
+  <div class="col m-0 pt-2">
+  Category: <a href="/buycar?productCategory=${advertisment.product.productCategory}">${advertisment.product.productCategory}</a>
+  </div>
   
   </div>
+   
+  
+  </div>
+  
   <div class="card-body">
     <h4 class="card-title">${advertisment.product.productName}</h4>
     <p class="card-text">${advertisment.product.productDescription}</p>
   </div>
+  
+  <div class="card-footer">
+      <small class="text-muted">Last updated: ${fn:substring(advertisment.lastModifiedDate, 0, 10)}</small>
+      <small> | </small>
+      <small class="text-muted">Submitted by: ${advertisment.seller.username}</small>
+    </div>
 </div>
 
 	</div>
@@ -101,5 +132,34 @@ font-weight: bold;
 	<script src="https://code.jquery.com/jquery-3.3.1.min.js"
 		integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
 		crossorigin="anonymous"></script>
+		
+		<script type="text/javascript">
+		var btnClicked;
+		$('.btnAddToCart').on('click', function(event) {
+
+			var id = $(this).attr('data-advertisment-id');
+			btnClicked = $(this);
+			var retMsg = null;
+
+			$.ajax({
+				type : "POST",
+				dataType : "json",
+				url : "http://localhost:8080/buycar/rest/cart/add/" + id,
+				dataType : "text",
+				success : function(data) {
+					var msg = data;
+					console.log(msg);
+					ajaxCallBack(msg);
+				}
+			});
+
+		});
+
+		function ajaxCallBack(retString) {
+			console.log(retString);
+			console.log(btnClicked);
+			btnClicked.text(retString);
+		}
+	</script>
 </body>
 </html>

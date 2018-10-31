@@ -1,6 +1,5 @@
 # Buycar - Car Dealership Spring MVC App
-
-## Java, Spring, JSP, Bootstrap, Hibernate, MySQL, JQuery | Editor used: Eclipse JEE
+Java, Spring, JSP, Bootstrap, Hibernate, MySQL, JQuery | Editor used: Eclipse JEE
 
 ## Description
 A prototype of a car dealership web app. 
@@ -11,6 +10,7 @@ Import buycar.sql to server before running the app to load initial database. Oth
 * ExceptionHandler
 * Order Exception Redirecting
 * Double check on server side if uploaded image is jpg
-* Admin functionality like delete or block user, block advertisment
+* Admin functionality - delete or block user, block advertisment
+* show seller profile page to anonymus users
 
 
