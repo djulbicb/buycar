@@ -18,15 +18,15 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.persistence.OrderBy;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.NotEmpty;
 
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
-import org.hibernate.annotations.Sort;
-import org.hibernate.annotations.SortComparator;
-import org.hibernate.annotations.SortNatural;
+
+
 
 import com.bo.buycar.model.Advertisment;
 
@@ -88,11 +88,11 @@ public class User {
 	List<Role> roles;
 
 	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "seller")
-	//@SortNatural
+	@OrderBy("id ASC")
 	Set<Advertisment> advertsSold;
 
 	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "buyer")
-	//@SortNatural
+	@OrderBy("id ASC")
 	Set<Advertisment> advertsBought;
 
 	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "user", orphanRemoval = true)

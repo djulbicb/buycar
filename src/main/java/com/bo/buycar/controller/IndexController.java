@@ -39,79 +39,86 @@ public class IndexController {
 
 	@Autowired
 	ProductService productService;
-	
+
 	@Autowired
 	AdvertismentService advertismentService;
-		
+
 	@Autowired
-	UserService userService;	
-	
-	
+	UserService userService;
+
 	@GetMapping("/")
-	public String getIndex(@RequestParam(required=false, name="productCategory", defaultValue="")String productCategory, @RequestParam(defaultValue="0", name="page") int page, Model model) {
-		//List<Advertisment> advertisments = advertismentService.getAdvertismentAll();
-		
-		
-		PageList pageList = advertismentService.getAdvertismentAll(productCategory,page);
-		model.addAttribute("currentPage",page);
-		
+	public String getIndex(
+			@RequestParam(required = false, name = "productCategory", defaultValue = "") String productCategory,
+			@RequestParam(defaultValue = "0", name = "page") int page, Model model) {
+		// List<Advertisment> advertisments = advertismentService.getAdvertismentAll();
+
+		PageList pageList = advertismentService.getAdvertismentAll(productCategory, page);
+		model.addAttribute("currentPage", page);
+
 		System.out.println(pageList);
 		model.addAttribute("advertisments", pageList.getListAdvertisments());
 		model.addAttribute("pageList", pageList);
-		
+
 		if (!productCategory.equals("")) {
-			productCategory = "productCategory=" + productCategory ;
+			productCategory = "productCategory=" + productCategory;
 		}
 		model.addAttribute("productCategory", productCategory);
-		
-		
+
 		return "index";
 	}
-	
+
 	@GetMapping("/register")
 	public String getRegister(Model model) {
 		model.addAttribute("user", new User());
 		return "general/register";
 	}
-	
-	
+
 	@PostMapping("/register")
 	public String postRegister(Model model, @Valid @ModelAttribute("user") User user, BindingResult result) {
 		if (result.hasErrors()) {
 			return "general/register";
 		}
-		
+
 		if (userService.findIfEmailExists(user.getEmail())) {
 			model.addAttribute("emailError", "Email already exists, enter new user");
 			return "general/register";
 		}
-		
+
 		if (userService.findIfUsernameExists(user.getUsername())) {
 			model.addAttribute("usernameError", "Username already exists, enter new user");
 			return "general/register";
 		}
-		
+
 		userService.addUser(user);
 		return "redirect:/login?register";
 	}
-	
+
 	@GetMapping("/login")
-	public String getLogin(
-			@RequestParam(name="logout", required=false) String logout, 
-			@RequestParam(name="error", required=false) String error, 
-			@RequestParam(name="register", required=false) String register,
-			Model model) {
+	public String getLogin(@RequestParam(name = "logout", required = false) String logout,
+			@RequestParam(name = "error", required = false) String error,
+			@RequestParam(name = "register", required = false) String register, Model model) {
 		if (error != null) {
 			model.addAttribute("msg", "Invalid username and password");
 		}
 
-		if (logout!= null) {
+		if (logout != null) {
 			model.addAttribute("msg", "You logged out sucesfully");
 		}
-		
-		if (register!= null) {
+
+		if (register != null) {
 			model.addAttribute("msg", "You registered sucesfully. Enter info to login.");
 		}
 		return "general/login";
 	}
+
+	@GetMapping("/show")
+	public String showAdvertisment(@RequestParam(name = "ad", required = true) int advertismentId, Model model) {
+		Advertisment advertisment = advertismentService.getAdvertismentById(advertismentId);
+		Product product = advertisment.getProduct();
+		model.addAttribute("advertisment", advertisment);
+		model.addAttribute("product", product);
+		
+		return "general/showAdvertisment";
+	}
 }
+

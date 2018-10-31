@@ -31,7 +31,7 @@ import com.bo.buycar.model.auth.UserStatus;
 import com.sun.istack.internal.NotNull;
 
 @Entity
-public class Product implements Serializable {
+public class Product implements Serializable, Comparable<Product> {
 
 	public Product() {
 		productImages = new ArrayList<>();
@@ -156,5 +156,10 @@ public class Product implements Serializable {
 				+ productDescription + ", productPrice=" + productPrice + ", productYear=" + productYear
 				+ ", productImageFile=" + productImageFile + ", productImages=" + productImages + ", advertisment="
 				+ advertisment + ", productCategory=" + productCategory + "]";
+	}
+
+	@Override
+	public int compareTo(Product o) {
+		return this.getProductName().compareTo(o.getProductName());
 	}
 }

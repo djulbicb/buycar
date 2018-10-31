@@ -59,7 +59,7 @@ public class AdvertismentDaoImpl implements AdvertismentDao{
 	@Override
 	public List<Advertisment> getAdvertismentAll() {
 		Session session = sessionFactory.getCurrentSession();
-		List<Advertisment> list = session.createQuery("from Advertisment").list();
+		List<Advertisment> list = session.createQuery("from Advertisment ad order by ad.advertismentId").list();
 		session.flush();
 		return list;
 	}
@@ -88,10 +88,10 @@ public class AdvertismentDaoImpl implements AdvertismentDao{
 		String queryStr = "";
 		Query query = null;
 		if (productCategory.equals("")) {
-			queryStr = "from Advertisment ad where ad.isActive=true";
+			queryStr = "from Advertisment ad where ad.isActive=true order by ad.product.productName";
 			query = session.createQuery(queryStr);
 		}else {
-			queryStr = "from Advertisment ad where ad.product.productCategory =:productCategory and ad.isActive=true";
+			queryStr = "from Advertisment ad where ad.product.productCategory =:productCategory and ad.isActive=true order by ad.product.productName";
 			query = session.createQuery(queryStr );
 			query.setParameter("productCategory",productCategory);
 		}

@@ -75,11 +75,16 @@
 
 							<c:choose>
 								<c:when test="${not empty advert.product.productImages[0]}">
+								<a href="/buycar/show?ad=${advert.advertismentId}">
 									<img class="card-img-top img-fluid"
 										src="${contextPath}/resources/img/${advert.product.productImages[0].productImgName}"
 										alt="Card image cap">
+										</a>
 								</c:when>
 								<c:otherwise>
+								<a href="/buycar/show?ad=${advert.advertismentId}">
+									<img class="card-img-top img-fluid"
+										src="${contextPath}/resources/img/noimage.jpg"></a>
 									<img class="card-img-top img-fluid"
 										src="${contextPath}/resources/img/noimage.jpg">
 								</c:otherwise>
@@ -89,9 +94,8 @@
 
 
 							<div class=" card-body d-flex flex-column card-block p-2">
-								<h4 class="card-title">${advert.product.productName}</h4>
-
-
+							
+								<h4 class="card-title"><a href="/buycar/show?ad=${advert.advertismentId}">${advert.product.productName}</a></h4>
 
 
 

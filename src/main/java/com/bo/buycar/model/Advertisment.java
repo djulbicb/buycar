@@ -119,12 +119,7 @@ public class Advertisment{
 	public void setSeller(User seller) {
 		this.seller = seller;
 	}
-/*
-	@Override
-	public int compareTo(Advertisment o) {
-		
-		return publishDate.compareTo(o.getPublishDate());
-	}*/
+
 
 	public List<CartItem> getCartItems() {
 		return cartItems;

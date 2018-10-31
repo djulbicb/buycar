@@ -9,7 +9,7 @@ import com.bo.buycar.model.Advertisment;
 public class PageList {
 
 	
-	public static final int COUNT = 3;
+	public static final int COUNT = 8;
 	 int totalPageCount;
 	 int totalCount;
 	 int currentPage;
