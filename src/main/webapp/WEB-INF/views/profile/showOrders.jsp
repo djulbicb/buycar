@@ -45,21 +45,66 @@ h2 {
 	<div class="container">
 
 
-	<c:forEach items="${orders}" var="order">
-	<div>
-	${order.id} ${order.totalValue} 
-		<c:forEach items="${order.cartItems}" var="cartItem">
-			${cartItem.advertisment.product.productName}
+		<c:forEach items="${orders}" var="order">
+			<div>
+
+				<div class="card border-light mb-3 ">
+					<div class="card-header bg-light">
+						
+							<div class="">Order id: ${order.id} | Order date: ${order.orderDate}</div>
+						
+					</div>
+					<div class="card-body">
+
+
+						<table class="table table-hover table-sm">
+							<thead>
+								<tr>
+									<th scope="col">#</th>
+									<th scope="col">Product name</th>
+									<th scope="col">Quontity</th>
+									<th scope="col">Price</th>
+								</tr>
+							</thead>
+							<tbody>
+								<c:forEach items="${order.cartItems}" var="cartItem"
+									varStatus="i">
+									<tr class="">
+										<th scope="row">${i.index+1}</th>
+										<td>${cartItem.advertisment.product.productName}</td>
+										<td>${cartItem.quontity}</td>
+										<td>${cartItem.advertisment.product.productPrice}$</td>
+									</tr>
+								</c:forEach>
+								<tr class="table-light">
+									<td></td>
+									<td></td>
+									<td>Total value:</td>
+									<td>${order.totalValue}$</td>
+								</tr>
+							</tbody>
+						</table>
+
+
+
+
+
+
+
+
+					</div>
+				</div>
+
+
+			</div>
 		</c:forEach>
+
+
+
 	</div>
-	</c:forEach>
+	<!-- CONTAINER END -->
 
 
-
-		</div>
-		<!-- CONTAINER END -->
-
-
-		<jsp:include page="../template/footer.jsp" />
+	<jsp:include page="../template/footer.jsp" />
 </body>
 </html>

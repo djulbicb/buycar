@@ -26,7 +26,8 @@
 			access="permitAll" />
 		<security:intercept-url pattern="/seller/**"
 			access="hasAuthority('USER')" />
-
+		<security:intercept-url pattern="/profile/**"
+			access="hasAuthority('USER')" />
 		<security:form-login login-page="/login" default-target-url="/" authentication-failure-url="/login?error"/>
 		<security:logout logout-success-url="/login?logout" logout-url="/logout"
 			delete-cookies="JSESSIONID"/>

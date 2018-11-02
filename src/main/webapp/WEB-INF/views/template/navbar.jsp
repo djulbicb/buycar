@@ -19,15 +19,17 @@
 				<li class="nav-item"><a class="nav-link" href="/buycar/">Home
 						<span class="sr-only">(current)</span>
 				</a></li>
-				<li class="nav-item"><a class="nav-link"
+				<sec:authentication var="user" property="principal" />
+				<sec:authorize access="isAuthenticated()">
+					<li class="nav-item"><a class="nav-link"
 					href="${contextPath}/seller/view/showAll">Products</a></li>
-				<li class="nav-item"><a class="nav-link"
-					href="${contextPath}/seller/home">Seller</a></li>
-
+				</sec:authorize>
+				
+				
 			</ul>
 
 
-			<sec:authentication var="user" property="principal" />
+			
 
 <sec:authorize access="isAnonymous()">
    <div class="btn-group" role="group" aria-label="Basic example">

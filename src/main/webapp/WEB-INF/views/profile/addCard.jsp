@@ -31,13 +31,13 @@
 
 
 		<form:form method="POST" class="jumbotron jumbotron-fluid"
-			action="/buycar/profile/addCard" modelAttribute="card">
+			action="${contextPath}/profile/addCard" modelAttribute="card">
 
 			<div class="row">
 				<div class="col-8 offset-2">
 
 					<h3>Enter card information:</h3>
-
+					<form:hidden path="balance" id="balance" class="form-control" value="0"/>
 
 					<form:errors path="cardNumber" cssClass="form-error text-alert" />
 					${usernameError}
@@ -45,7 +45,7 @@
 					<div class="form-group">
 						<div class="input-group mb-2">
 						
-							<form:input class="form-control" placeholder="XX-XXXXXXXX-XXX"
+							<form:input required="required" class="form-control" placeholder="XX-XXXXXXXX-XXX"
 								id="cardNumber" name="cardNumber" path="cardNumber" />
 
 						</div>

@@ -51,7 +51,7 @@ public class PageList {
 	public void setTotalCount(int totalCount) {
 		this.totalCount = totalCount;
 System.out.println(totalCount + "total countr");
-		int pageCount = (int)(getListAdvertisments().size()/PageList.COUNT);
+		int pageCount = (int)(totalCount/PageList.COUNT);
 		System.out.println(pageCount);
 		setTotalPageCount(pageCount); 
 	}

@@ -48,9 +48,8 @@ h2 {
 		<div class="card text-white bg-info mb-3">
 			<div class="card-header">Hello ${user.username}!</div>
 			<div class="card-body">
-				<h4 class="card-title">Info card title</h4>
-				<p class="card-text">Some quick example text to build on the
-					card title and make up the bulk of the card's content.</p>
+				<h4 class="card-title">Information</h4>
+				<p class="card-text">View your personal info here.</p>
 			</div>
 		</div>
 

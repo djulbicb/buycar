@@ -118,7 +118,7 @@
 									</div>
 
 									<small class="border-top text-muted">last modified:
-										${advert.lastModifiedDate}</small>
+									${advert.lastModifiedDate}</small>
 
 								</div>
 

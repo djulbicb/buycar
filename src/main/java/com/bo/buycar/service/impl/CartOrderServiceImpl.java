@@ -44,7 +44,7 @@ public class CartOrderServiceImpl implements CartOrderService{
 		User user = userDao.getUserByUsername(username);
 		Card card = cardDao.getCardById(cardId);
 		
-		if (card.getUser() == user) {
+		if (card != null && card.getUser() == user) {
 			CartOrder cartOrder = new CartOrder();
 			
 			cartOrder.setUser(user);
@@ -59,21 +59,20 @@ public class CartOrderServiceImpl implements CartOrderService{
 			for (CartItem cartItem : cartItems) {
 				cartItem.setCartOrder(cartOrder);
 				cartOrder.getCartItems().add(cartItem);
-				
+				cartItem.getAdvertisment().setActive(false);
 				//cartItems.remove(cartItem);
-				total = cartItem.getQuontity() * cartItem.getAdvertisment().getProduct().getProductPrice();
+				
+				total += cartItem.getQuontity() * cartItem.getAdvertisment().getProduct().getProductPrice();
 				cartItem.setCart(null);
 			}
 			
-			
-					
 			CartOrder order = cartOrderDao.addCartOrder(cartOrder);
 			order.setTotalValue(total); 
 			user.getCart().setCartItems(new ArrayList<CartItem>());
 			
 			user.getCartOrders().add(order);
-			userDao.updateUser(user);
-			
+			card.setBalance(card.getBalance() - total);
+			userDao.updateUser(user);			
 		}
 		
 		

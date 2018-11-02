@@ -11,5 +11,6 @@ public interface CardService {
 	Card findByCardId(int cardId);
 
 	double getBalance(int cardId);
+
 	
 }

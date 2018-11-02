@@ -2,8 +2,16 @@ package com.bo.buycar.model.card;
 
 import java.util.List;
 
+
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -11,20 +19,24 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
+import javax.persistence.PrimaryKeyJoinColumn;
+import javax.persistence.Transient;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Pattern;
 
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
-import org.springframework.format.annotation.NumberFormat;
+import org.hibernate.validator.constraints.Length;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.bo.buycar.model.Advertisment;
-
 import com.bo.buycar.model.auth.User;
+import com.bo.buycar.model.auth.UserStatus;
 import com.bo.buycar.model.cart.CartOrder;
-import com.bo.buycar.model.product.Product;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.sun.istack.internal.NotNull;
 
@@ -42,12 +54,15 @@ public class Card {
 	@Pattern(regexp = "^(VISA|MASTER|MAESTRO)$", message = "Must be a card type")
 	String cardType;
 	
+	@NotNull
 	double balance;
 	
+	@NotNull
 	@Min(value=1)
 	@Max(value=12)
 	int monthExpire;
 	
+	@NotNull
 	@Min(value=2018)
 	@Max(value=2030)
 	int yearExpire;
@@ -56,7 +71,6 @@ public class Card {
 	@JoinColumn(name="fk_card_user")
 	@JsonIgnore
 	User user;
-	
 	
 	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "card", targetEntity=CartOrder.class)
 	@Fetch(value = FetchMode.SUBSELECT)

@@ -47,7 +47,7 @@ public class CartOrder{
 	@Fetch(value = FetchMode.SELECT)
 	List<CartItem> cartItems;
 
-	
+	Date orderDate;
 	
 	public int getId() {
 		return id;
@@ -102,6 +102,14 @@ public class CartOrder{
 	public String toString() {
 		return "CartOrder [id=" + id + ", cardType=" + cardType + ", totalValue=" + totalValue + ", user=" + user
 				+ ", card=" + card + ", cartItems=" + cartItems + "]";
+	}
+
+	public Date getOrderDate() {
+		return orderDate;
+	}
+
+	public void setOrderDate(Date orderDate) {
+		this.orderDate = orderDate;
 	}
 
 

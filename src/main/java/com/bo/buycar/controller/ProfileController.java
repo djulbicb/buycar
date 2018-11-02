@@ -3,14 +3,16 @@ package com.bo.buycar.controller;
 import java.security.Principal;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Random;
 
-import javax.validation.Valid;
+import javax.validation.*;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -44,35 +46,37 @@ public class ProfileController {
 	@Autowired
 	CartOrderService cartOrderService;
 	
+	
+	
 	@GetMapping("/showProfile")
 	public String getShowProfile(Principal principal, Model model) {
 		User user = userService.findUserByUsername(principal.getName());
 		System.out.println(user);
 		model.addAttribute("user", user);
-		System.out.println("---------------");
-		System.out.println(user);
-		System.out.println("---------------");
 		user.getCart().getCartItems();
 		return "profile/showProfile";
 	}
 
-	@GetMapping("/addCard")
-	public String getAddCard(Model model) {
-		Card card = new Card();
-		card.setYearExpire(Calendar.getInstance().get(Calendar.YEAR) + 4);
-		card.setMonthExpire(1);
-		model.addAttribute("card", card);
-		return "profile/addCard";
-	}
+
 	
 	@GetMapping("/showCart")
-	public String getShowCart(Model model,Principal principal) {
+	public String getShowCart(
+			Model model,Principal principal, 
+			@RequestParam(name="sucessOrder", required=false) String sucessOrder,
+			@RequestParam(name="errorOrder", required=false) String errorOrder
+			) {
 		User user = userService.findUserByUsername(principal.getName());		
 		List<CartItem> cartItems = user.getCart().getCartItems();
 		
 		double total = calcTltCartValue(cartItems);
 		
 		CartOrder order = new CartOrder();
+		
+		if (sucessOrder!=null) {
+			model.addAttribute("msg", "Order was succesfull");	
+		} else if(errorOrder!=null) {
+			model.addAttribute("msg", errorOrder);
+		}
 		
 		model.addAttribute("user", user);
 		model.addAttribute("cartItems", cartItems);
@@ -91,10 +95,27 @@ public class ProfileController {
 		}
 		return total;
 	}
-
+	
+	@GetMapping("/addCard")
+	public String getAddCard(Model model) {
+		Card card = new Card();
+		card.setYearExpire(Calendar.getInstance().get(Calendar.YEAR) + 4);
+		card.setMonthExpire(1);
+		card.setCardType("VISA");
+		card.setBalance(0);
+		model.addAttribute("card", card);
+		return "profile/addCard";
+	}
+	
 	@PostMapping("/addCard")
-	public String postAddCard(@Valid @ModelAttribute("card") Card card, Model model, Principal principal) {
+	public String postAddCard(@Valid @ModelAttribute("card") Card card, Principal principal, BindingResult result) {
+		if (result.hasErrors()) {
+			return "profile/addCard";
+		}
+		Random rnd = new Random();
+		System.out.println("POST ADD CARD");
 		String username = principal.getName();
+		card.setBalance(rnd.nextDouble()*100000+200000);
 		cardService.addCard(username, card);
 		return "redirect:/profile/showProfile";
 	}
@@ -107,8 +128,14 @@ public class ProfileController {
 	}
 	
 	@PostMapping("/placeOrder")
-	public void postPlaceOrder(@RequestParam(name="cardType", required=true) int cardId, Model model, Principal principal) {
-		cartOrderService.addOrder(cardId, principal.getName());
+	public String postPlaceOrder(@RequestParam(name="cardType", required=true) int cardId, Model model, Principal principal) {
+		
+		Card card = cardService.findByCardId(cardId);
+		if (card != null && card.getUser().getUsername().equals(principal.getName())) {
+			cartOrderService.addOrder(cardId, principal.getName());
+			return "redirect:/profile/showCart?sucessOrder";
+		}
+		return "redirect:/profile/showCart?errorOrder";
 	}
 	
 	@GetMapping("/showOrders")

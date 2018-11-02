@@ -1,4 +1,5 @@
 <%@ include file="../template/includes.jsp"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 <html lang="en">
 <head>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
@@ -48,16 +49,15 @@ p {
 		<div class="card text-white bg-info mb-3">
 			<div class="card-header">Hello ${user.username}!</div>
 			<div class="card-body">
-				<h4 class="card-title">Info card title</h4>
-				<p class="card-text">Some quick example text to build on the
-					card title and make up the bulk of the card's content.</p>
+				<h4 class="card-title">Sell products</h4>
+				<p class="card-text">Products you have added to webshop.</p>
 			</div>
 		</div>
 
 		<span class="btn-group" role="group" aria-label="Basic example">
 			<button class="btn disabled" disabled="disabled">
 				<i class="fas fa-cog"></i>
-			</button> <a class="btn btn-primary" href="${contextPath}/seller/addProduct">Profile
+			</button> <a class="btn btn-primary" href="${contextPath}/profile/showProfile">Profile
 				settings</a>
 
 		</span> <span class="btn-group" role="group" aria-label="Basic example">

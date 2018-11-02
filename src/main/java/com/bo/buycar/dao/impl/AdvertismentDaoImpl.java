@@ -106,7 +106,16 @@ public class AdvertismentDaoImpl implements AdvertismentDao{
 		System.out.println("--------");
 		
 		PageList pageList = new PageList(page, list);
-		Long l = (Long)session.createQuery("select count(1) from  Advertisment").getSingleResult();
+		Long l;
+		if (productCategory.equals("")) {
+			l = (Long)session.createQuery("select count(1) from  Advertisment ad where ad.isActive=true").getSingleResult();
+		}else {
+			Query query2 = session.createQuery("select count(1) from  Advertisment ad where ad.product.productCategory =:productCategory and ad.isActive=true");
+			query2.setParameter("productCategory",productCategory);
+			l = (Long)query2.getSingleResult();
+		}
+		
+		
 		
 		pageList.setTotalCount(Math.toIntExact(l));
 		
